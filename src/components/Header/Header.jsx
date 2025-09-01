@@ -51,7 +51,6 @@ export default function Header() {
         { to: "/", text: "Home" },
         { to: "/about", text: "About" },
         { to: "/contact", text: "Contact" },
-        { to: "/github", text: "Github" }
     ];
 
     // Style for NavLink, making it reusable

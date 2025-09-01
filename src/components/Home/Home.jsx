@@ -104,7 +104,7 @@ export default function OpenStartPage() {
             img: {Rakesh_P},
         },
         {
-            name: "Cheedhe",
+            name: "Cheedhe Khachnaoui",
             country: "Tunisia",
             bio: "Bringing a global perspective and cultural diversity from North Africa.",
             img: "https://placehold.co/400x400/16a34a/ffffff?text=C",
