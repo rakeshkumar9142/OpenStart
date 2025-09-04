@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import PiCon from "../../assets/Gemini1logo.png"
 // Using a placeholder for the logo to keep the component self-contained.
-const OpenStartLogo = 'https://placehold.co/100x100/1e1b4b/ffffff?text=OS&font=inter';
+const OpenStartLogo = PiCon;
 
 // Reusable SVG Icon components for social media links. This keeps the main component cleaner.
 const SocialIcon = ({ href, children }) => (

@@ -1,9 +1,10 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, OrbitControls, Stars } from '@react-three/drei';
-import * as THREE from 'three';
 import Rakesh_P from "../../assets/Rakesh_P.jpg"
-
+import Cheedhe_P from "../../assets/Cheedhe_P1.jpg"
+import Vy_P from "../../assets/Vy_P.jpg"
+import Globe from './Globe.jsx'
 
 // Helper components for icons
 const GlobeIcon = () => (
@@ -39,54 +40,6 @@ const TargetIcon = () => (
 );
 
 
-// 3D Globe Component
-function Globe() {
-  const globeRef = useRef();
-
-  // Use useFrame for continuous rotation
-  useFrame(() => {
-    if (globeRef.current) {
-      globeRef.current.rotation.y += 0.01;
-    }
-  });
-
-  // Create a texture loader
-  const textureLoader = new THREE.TextureLoader();
-  // Load the texture (using a placeholder for the map)
-  // A simple world map texture would work well here.
-  // For this example, we'll use a generated texture.
-  
-  const canvas = document.createElement('canvas');
-  canvas.width = 2048;
-  canvas.height = 1024;
-  const context = canvas.getContext('2d');
-  
-  // Draw continents (simplified)
-  context.fillStyle = '#4F4F4F'; // Land color
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = '#82cafa'; // Water color
-  // Simplified land masses
-  context.fillRect(500, 300, 400, 300);
-  context.fillRect(1200, 400, 500, 400);
-  context.fillRect(200, 700, 300, 200);
-  context.fillRect(1000, 100, 200, 150);
-  
-  const texture = new THREE.CanvasTexture(canvas);
-
-
-  return (
-    <group ref={globeRef}>
-      <Sphere args={[2.5, 64, 64]}>
-        <meshStandardMaterial 
-          map={texture}
-          metalness={0.5}
-          roughness={0.7}
-        />
-      </Sphere>
-    </group>
-  );
-}
-
 
 // Main Component
 export default function OpenStartPage() {
@@ -95,19 +48,19 @@ export default function OpenStartPage() {
             name: "Vikusyaaa",
             country: "Ukraine",
             bio: "Visionary founder with a passion for empowering young changemakers.",
-            img: "https://placehold.co/400x400/7c3aed/ffffff?text=V",
+            img: Vy_P
         },
         {
             name: "Rakesh Kumar",
             country: "India",
             bio: "Student entrepreneur building XfBeeN to reduce food wastage using computer vision.",
-            img: {Rakesh_P},
+            img: Rakesh_P,
         },
         {
             name: "Cheedhe Khachnaoui",
             country: "Tunisia",
             bio: "Bringing a global perspective and cultural diversity from North Africa.",
-            img: "https://placehold.co/400x400/16a34a/ffffff?text=C",
+            img: Cheedhe_P,
         },
     ];
 
@@ -160,27 +113,35 @@ export default function OpenStartPage() {
                 </div>
             </header>
 
+            {/* Profile Photo Section */}
+           
+
             <main className="py-20 px-4 sm:px-6 lg:px-8">
                 {/* Founder's Story Section */}
                 <section className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24">
                     <div className="order-2 md:order-1">
                         <h2 className="text-3xl font-bold text-indigo-400 mb-4">The Spark of a Visionary</h2>
-                        <p className="text-gray-300 mb-4">
-                            OpenStart is an ambitious project founded by <strong>Vikusyaaa</strong>, a visionary young leader from Ukraine. Her entrepreneurial spark grew even stronger after her project was ranked among the top 3 out of 250 teams worldwide in the Nazarbayev University Summer Research Program 2025.
+                        <p className="text-gray-1000 text-center mb-5">
+                            OpenStart is an ambitious project founded by <strong>Vikusyaaa</strong>, 
+                            a visionary young leader from Ukraine. Her entrepreneurial spark grew even 
+                            stronger after her project was ranked among the top 3 out of 250 teams worldwide 
+                            in the Nazarbayev University Summer Research Program 2025.
                         </p>
-                        <p className="text-gray-300">
-                            The vision is simple yet powerful: break down geographical barriers and provide high school students with access to world-class mentorship, networks, and tools that are usually limited to only a few.
+                        <p className="text-gray-1000">
+                            The vision is simple yet powerful: break down geographical barriers and 
+                            provide high school students with access to world-class mentorship, networks,
+                            and tools that are usually limited to only a few.
                         </p>
                     </div>
                     <div className="order-1 md:order-2 flex justify-center">
                         <div className="w-64 h-64 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 p-1 shadow-2xl">
-                             <img src="https://placehold.co/400x400/1e1b4b/ffffff?text=Founder" alt="Vikusyaaa" className="w-full h-full rounded-full object-cover" />
+                             <img src={Vy_P} alt="Vikusyaaa" className="w-full h-full rounded-full object-cover" />
                         </div>
                     </div>
                 </section>
 
                 {/* Team Section */}
-                <section className="max-w-7xl mx-auto text-center mb-24">
+                <section className="max-w-7xl mx-auto text-center ">
                     <h2 className="text-4xl font-bold mb-2">The Team Behind OpenStart</h2>
                     <p className="text-indigo-400 mb-12">A Global Collaboration of Passionate Innovators</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-
+import PiCon from "../../assets/Gemini1logo.png"
 // Using a placeholder for the logo so the component is self-contained and runnable.
-const OpenStartLogo = 'https://placehold.co/100x100/1e1b4b/ffffff?text=OS&font=inter';
+const OpenStartLogo = PiCon;
 
 // SVG Icons for the mobile menu toggle for a clean, dependency-free implementation.
 const MenuIcon = () => (
@@ -14,6 +14,20 @@ const MenuIcon = () => (
 const CloseIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+);
+
+// News Icon for the dropdown
+const NewsIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+    </svg>
+);
+
+// Chevron Down Icon for dropdown indicator
+const ChevronDownIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
     </svg>
 );
 
@@ -41,16 +55,18 @@ const TelegramIcon = ({ className }) => (
     </svg>
 );
 
-
 export default function Header() {
     // State to manage the visibility of the mobile menu
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    // State to manage the News dropdown
+    const [isNewsOpen, setIsNewsOpen] = useState(false);
 
     // Navigation links data for easier mapping and maintenance
     const navLinks = [
         { to: "/", text: "Home" },
         { to: "/about", text: "About" },
         { to: "/contact", text: "Contact" },
+        { to: "/news", text: "News" },
     ];
 
     // Style for NavLink, making it reusable
@@ -79,6 +95,9 @@ export default function Header() {
                                 {link.text}
                             </NavLink>
                         ))}
+                        
+                        {/* News Dropdown */}
+                       
                     </div>
 
                     {/* Action Buttons */}
@@ -138,6 +157,19 @@ export default function Header() {
                                 {link.text}
                             </NavLink>
                         ))}
+                        
+                        {/* News in Mobile Menu */}
+                        <Link
+                            to="/news"
+                            className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            <div className="flex items-center gap-2">
+                                <NewsIcon />
+                                News
+                            </div>
+                        </Link>
+                        
                         <div className="border-t border-gray-700 pt-4 mt-4 flex flex-col items-start space-y-3">
                              <Link
                                 to="#"
