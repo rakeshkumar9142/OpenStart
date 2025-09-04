@@ -11,7 +11,7 @@ const News = () => {
     const [error, setError] = useState(null);
 
 
-    const API_KEY =import.meta.env.VITE_GUARDIAN_API_KEY
+    const API_KEY = import.meta.env.VITE_GUARDIAN_API_KEY;
     const BASE_URL = 'https://content.guardianapis.com/search';
 
     const categories = [
