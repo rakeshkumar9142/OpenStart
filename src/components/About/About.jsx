@@ -1,87 +1,12 @@
-import { useRef, useMemo, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import {useState, useEffect } from 'react';
+import { Canvas} from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
-import * as THREE from 'three';
 import PropTypes from 'prop-types';
-import Rakesh_P from "../../assets/Rakesh_P.jpg";
-import Cheedhe_P from "../../assets/Cheedhe_P.jpg";
-
-//import Gemini1 from "../../assets/gemini1.png"
+import ParticlePlexus  from './ParticlePlexus.jsx';
 import Gemini1 from "../../assets/Gemini2.png"
-// --- Helper Components for Icons ---
-const MissionIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-    </svg>
-);
-
-const VisionIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-    </svg>
-);
-
-const ValuesIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-4 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-    </svg>
-);
-
-// --- 3D Interactive Particle Plexus ---
-function ParticlePlexus({ count = 200 }) {
-    const mesh = useRef();
-    const light = useRef();
-
-    const particles = useMemo(() => {
-        const temp = [];
-        for (let i = 0; i < count; i++) {
-            const t = Math.random() * 100;
-            const factor = 20 + Math.random() * 100;
-            const speed = 0.01 + Math.random() / 200;
-            const xFactor = -50 + Math.random() * 100;
-            const yFactor = -50 + Math.random() * 100;
-            const zFactor = -50 + Math.random() * 100;
-            temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
-        }
-        return temp;
-    }, [count]);
-
-    const dummy = useMemo(() => new THREE.Object3D(), []);
-
-    useFrame((state) => {
-        particles.forEach((particle, i) => {
-            let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
-            t = particle.t += speed / 2;
-            const a = Math.cos(t) + Math.sin(t * 1) / 10;
-            const b = Math.sin(t) + Math.cos(t * 2) / 10;
-            const s = Math.cos(t);
-            particle.mx += (state.mouse.x * state.viewport.width - particle.mx) * 0.01;
-            particle.my += (state.mouse.y * state.viewport.height - particle.my) * 0.01;
-            dummy.position.set(
-                (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
-                (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
-                (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
-            );
-            dummy.scale.set(s, s, s);
-            dummy.rotation.set(s * 5, s * 5, s * 5);
-            dummy.updateMatrix();
-            mesh.current.setMatrixAt(i, dummy.matrix);
-        });
-        mesh.current.instanceMatrix.needsUpdate = true;
-    });
-
-    return (
-        <>
-            <pointLight ref={light} distance={40} intensity={8} color="lightblue" />
-            <instancedMesh ref={mesh} args={[null, null, count]}>
-                <dodecahedronGeometry args={[0.2, 0]} />
-                <meshPhongMaterial color="#fff" />
-            </instancedMesh>
-        </>
-    );
-}
-
+import TeamMemberCard from './TeamMemberCard.jsx';
+import { MissionIcon, VisionIcon, ValuesIcon } from "./Icons.jsx";
+import teamMembers from './teamMembers.jsx';
 
 // --- Statistics Component ---
 const StatCard = ({ number, label, icon }) => (
@@ -105,28 +30,7 @@ StatCard.propTypes = {
 };
 
 // --- Team Member Card ---
-const TeamMemberCard = ({ member }) => (
-    <div className="group relative">
-        <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-        <div className="relative bg-gray-800 rounded-2xl p-6 border border-gray-700 group-hover:border-indigo-500/50 transition-all duration-300">
-            <div className="flex flex-col items-center text-center">
-                <div className="relative mb-4">
-                    <img 
-                        src={member.img} 
-                        alt={member.name}
-                        className="w-24 h-24 rounded-full object-cover border-4 border-gray-700 group-hover:border-indigo-500 transition-colors duration-300"
-                    />
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">{member.flag}</span>
-                    </div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
-                <p className="text-indigo-400 text-sm font-medium mb-3">{member.role}</p>
-                <p className="text-gray-400 text-sm leading-relaxed">{member.bio}</p>
-            </div>
-        </div>
-    </div>
-);
+
 
 TeamMemberCard.propTypes = {
     member: PropTypes.shape({
@@ -147,33 +51,7 @@ export default function About() {
         setIsVisible(true);
     }, []);
 
-    const teamMembers = [
-        {
-            name: "Vikusyaaa",
-            role: "Founder & Visionary",
-            country: "Ukraine",
-            flag: "🇺🇦",
-            bio: "Visionary founder with a passion for empowering young changemakers. Ranked top 3 globally in Nazarbayev University Summer Research Program 2025.",
-            img: "https://placehold.co/400x400/7c3aed/ffffff?text=V"
-        },
-        {
-            name: "Rakesh Kumar",
-            role: "Tech Innovator",
-            country: "India", 
-            flag: "🇮🇳",
-            bio: "Student entrepreneur building XfBeeN to reduce food wastage using computer vision technology.",
-            img: Rakesh_P
-        },
-        {
-            name: "Cheedhe Khachnaoui",
-            role: "Global Ambassador",
-            country: "Tunisia",
-            flag: "🇹🇳", 
-            bio: "Bringing a global perspective and cultural diversity from North Africa to the OpenStart mission.",
-            img: Cheedhe_P
-        }
-    ];
-
+   
     return (
         <div className="bg-gray-900 text-white overflow-x-hidden">
             {/* Hero Section */}
