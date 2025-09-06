@@ -9,6 +9,7 @@ import About from './components/About/About.jsx'
 import Contact from './components/Contact/Contact.jsx'
 import News from './components/News/News.jsx'
 import Features from './components/Features/Features.jsx'
+import Mentors from './components/Mentors/Mentors.jsx';
 // const router = createBrowserRouter([
 //   {
 //     path: '/',
@@ -38,6 +39,7 @@ const router = createBrowserRouter(
       <Route path='contact' element={<Contact />} />
       <Route path='news' element={<News />} />
       <Route path='features' element={<Features />} /> 
+      <Route path='mentors' element={<Mentors />} /> 
     </Route>
   )
 )
