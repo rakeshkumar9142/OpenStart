@@ -6,7 +6,6 @@ import * as THREE from 'three';
 export default function Globe() {
     const globeRef = useRef();
   
-    // Use useFrame for continuous rotation
     useFrame(() => {
       if (globeRef.current) {
         globeRef.current.rotation.y += 0.01;
@@ -15,9 +14,7 @@ export default function Globe() {
   
     // Create a texture loader
     const textureLoader = new THREE.TextureLoader();
-    // Load the texture (using a placeholder for the map)
-    // A simple world map texture would work well here.
-    // For this example, we'll use a generated texture.
+   
     
     const canvas = document.createElement('canvas');
     canvas.width = 2048;
