@@ -66,7 +66,7 @@ export default function About() {
                 </div>
                 <div className={`relative z-10 text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
                     <div className="inline-flex items-center px-4 py-2 mb-6 bg-indigo-600/20 border border-indigo-500/30 rounded-full text-indigo-300 text-sm font-medium">
-                        <span className="w-2 h-2 bg-indigo-400 rounded-full mr-2 animate-pulse"></span>
+                        <span className="w-5 h-5 bg-indigo-400 rounded-full mr-2 animate-pulse"></span>
                         Empowering the Next Generation
                     </div>
                     <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">

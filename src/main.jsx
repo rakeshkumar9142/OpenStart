@@ -10,6 +10,7 @@ import Contact from './components/Contact/Contact.jsx'
 import News from './components/News/News.jsx'
 import Features from './components/Features/Features.jsx'
 import Mentors from './components/Mentors/Mentors.jsx';
+import ShowCase from './components/ShowCase/ShowCase.jsx'
 // const router = createBrowserRouter([
 //   {
 //     path: '/',
@@ -40,6 +41,7 @@ const router = createBrowserRouter(
       <Route path='news' element={<News />} />
       <Route path='features' element={<Features />} /> 
       <Route path='mentors' element={<Mentors />} /> 
+      <Route path='showcase' element={<ShowCase />} /> 
     </Route>
   )
 )
