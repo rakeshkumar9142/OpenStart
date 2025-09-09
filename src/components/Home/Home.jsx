@@ -6,6 +6,7 @@ import Globe from './Globe.jsx'
 import {teamMembers} from './teamMembers.jsx'
 import {GlobeIcon} from './Icon.jsx'
 import {differentiators} from './differentiators.jsx'
+import { Link } from 'react-router-dom';
 
 export default function OpenStartPage() {
     
@@ -29,9 +30,12 @@ export default function OpenStartPage() {
                     <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-gray-300">
                         Building the Next Generation of Global Entrepreneurs
                     </p>
-                    <button className="mt-8 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105">
+                    <Link 
+                     to="/contact"
+                    className="mt-8 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105 ">
+                        
                         Join the Movement
-                    </button>
+                    </Link>
                 </div>
             </header>
 
