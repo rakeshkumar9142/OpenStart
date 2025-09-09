@@ -2,6 +2,7 @@ import Rakesh_P from "../../assets/Rakesh_P.jpg"
 import Cheedhe_P from "../../assets/Cheedhe_P1.jpg"
 import Vy_P from "../../assets/Vy_P.jpg"
 
+
 export  const teamMembers = [
     {
         name: "Vikusyaaa",
@@ -22,6 +23,7 @@ export  const teamMembers = [
         img: Cheedhe_P,
     },
 ];
+
 
 
 

@@ -110,7 +110,7 @@ export default function Header() {
                         </Link>
                         {/* --- ADDED TELEGRAM BUTTON --- */}
                         <Link
-                            to="https://t.me/@RakeshKumar9905" // Replace with your Telegram link
+                            to="https://t.me/OpenStartProject_bot" // Replace with your Telegram link
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center rounded-md bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105"

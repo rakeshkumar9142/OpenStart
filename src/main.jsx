@@ -11,26 +11,8 @@ import News from './components/News/News.jsx'
 import Features from './components/Features/Features.jsx'
 import Mentors from './components/Mentors/Mentors.jsx';
 import ShowCase from './components/ShowCase/ShowCase.jsx'
-// const router = createBrowserRouter([
-//   {
-//     path: '/',
-//     element: <Layout/>,
-//     children: [
-//       {
-//         path: "",
-//         element: <Home />
-//       },
-//       {
-//         path: "about",
-//         element: <About />
-//       },
-//       {
-//         path: "contact",
-//         element: <Contact />
-//       }
-//     ]
-//   }
-// ]
+import LearnMore from './components/LearnMore/LearnMore.jsx';
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +24,7 @@ const router = createBrowserRouter(
       <Route path='features' element={<Features />} /> 
       <Route path='mentors' element={<Mentors />} /> 
       <Route path='showcase' element={<ShowCase />} /> 
+      <Route path='about-learn-more' element={<LearnMore />} /> 
     </Route>
   )
 )
