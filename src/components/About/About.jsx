@@ -7,7 +7,8 @@ import Gemini1 from "../../assets/Gemini2.png"
 import TeamMemberCard from './TeamMemberCard.jsx';
 import { MissionIcon, VisionIcon, ValuesIcon } from "./Icons.jsx";
 import teamMembers from './teamMembers.jsx';
-
+import { Link } from 'react-router-dom';
+import LearnMore from "../LearnMore/LearnMore.jsx";
 // --- Statistics Component ---
 const StatCard = ({ number, label, icon }) => (
     <div className="text-center group">
@@ -79,9 +80,13 @@ export default function About() {
                         <button className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-indigo-500/25">
                             Join Our Mission
                         </button>
-                        <button className="px-8 py-4 border-2 border-indigo-500 text-indigo-400 font-semibold rounded-xl hover:bg-indigo-500 hover:text-white transition-all duration-300 transform hover:scale-105">
+                        <Link 
+                            to="/about-learn-more"
+                            className="px-8 py-4 border-2 border-indigo-500 text-indigo-400 font-semibold rounded-xl hover:bg-indigo-500 hover:text-white transition-all duration-300 transform hover:scale-105">
                             Learn More
-                        </button>
+                        </Link>
+
+            
                     </div>
                 </div>
             </div>

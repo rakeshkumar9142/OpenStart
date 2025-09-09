@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 1rem;
+  max-width: 100%;
+  margin: 0 ;
+  padding: 0.5rem;
   text-align: center;
   font-family: 'Inter', sans-serif;
   background: linear-gradient(to right, #f9f9f9, #eef2f7);

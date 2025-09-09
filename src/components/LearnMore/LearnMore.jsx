@@ -1,111 +1,145 @@
-import React from 'react';
+import React from "react";
+import { motion } from "framer-motion";
 
-// --- SVG Icon Components ---
-// Using inline SVGs is a great practice for performance and scalability.
-const CodeBracketIcon = ({ className = "w-8 h-8" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
-  </svg>
-);
-
-const UsersIcon = ({ className = "w-8 h-8" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m-7.5-2.962c.513-.96 1.487-1.591 2.571-1.82m-2.571 1.82a9.094 9.094 0 01-3.741-.479 3 3 0 01-4.682-2.72m7.5-2.962c-.513-.96-1.487-1.591-2.571-1.82m11.486-1.486A9.095 9.095 0 0012 8c-1.079 0-2.112.183-3.078.513m5.744 2.261A9.095 9.095 0 0112 16c-1.079 0-2.112-.183-3.078-.513m5.744-2.261c.513.96 1.487 1.591 2.571 1.82m-2.571-1.82a9.094 9.094 0 003.741.479 3 3 0 004.682 2.72m-7.5 2.962c-.513.96-1.487 1.591-2.571 1.82m-2.571-1.82A9.094 9.094 0 013.741 16.28a3 3 0 01-4.682 2.72m7.5 2.962c.513.96 1.487 1.591 2.571 1.82" />
-  </svg>
-);
-
-const RocketLaunchIcon = ({ className = "w-8 h-8" }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.82m5.84-2.56a15.953 15.953 0 00-5.84-2.56m0 0a15.953 15.953 0 01-5.84 2.56m5.84-2.56v-4.82a6 6 0 015.84-7.38v4.82z" />
-  </svg>
-);
-
-const LightBulbIcon = ({ className = "w-8 h-8" }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-11.62a6.01 6.01 0 00-1.5-11.62m0 0A2.25 2.25 0 009.75 6v1.5m0 0a2.25 2.25 0 01-2.25 2.25m0 0a2.25 2.25 0 00-2.25 2.25m2.25 2.25v-1.5m0 0a2.25 2.25 0 002.25 2.25m0 0a2.25 2.25 0 012.25 2.25m0 0a2.25 2.25 0 002.25 2.25M12 18a2.25 2.25 0 002.25-2.25m-2.25 2.25a2.25 2.25 0 01-2.25-2.25m0 0A2.25 2.25 0 019.75 12v-1.5m0 0a2.25 2.25 0 00-2.25-2.25m2.25-2.25a2.25 2.25 0 012.25-2.25" />
-    </svg>
-);
-
-
-// --- Feature Card Component ---
-const FeatureCard = ({ icon, title, children }) => (
-  <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-    <div className="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 text-indigo-600 mb-4">
-      {icon}
+// --- Floating Orbs Background ---
+const FloatingOrbs = () => {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      {[...Array(12)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full mix-blend-screen filter blur-2xl opacity-70"
+          style={{
+            background: `radial-gradient(circle, ${
+              ["#ff00ff", "#00ffff", "#ff6f61", "#6a5acd"][i % 4]
+            } 0%, transparent 70%)`,
+            width: `${150 + Math.random() * 200}px`,
+            height: `${150 + Math.random() * 200}px`,
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            x: [0, 50, -50, 0],
+            y: [0, -30, 30, 0],
+            rotate: [0, 360],
+          }}
+          transition={{
+            duration: 20 + Math.random() * 10,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      ))}
     </div>
-    <h3 className="text-xl font-semibold text-slate-800 mb-2">{title}</h3>
-    <p className="text-slate-600 leading-relaxed">{children}</p>
-  </div>
+  );
+};
+
+// --- Feature Card ---
+const FeatureCard = ({ title, description }) => (
+  <motion.div
+    whileHover={{ scale: 1.07, rotateX: 5, rotateY: -5 }}
+    transition={{ type: "spring", stiffness: 200 }}
+    className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-2xl shadow-lg hover:shadow-xl hover:border-cyan-400/60"
+  >
+    <h3 className="text-2xl font-semibold text-white mb-4">{title}</h3>
+    <p className="text-slate-200 leading-relaxed">{description}</p>
+  </motion.div>
 );
 
-
-// --- Main LearnMore Component ---
+// --- Main Component ---
 export default function LearnMore() {
   const features = [
     {
-      icon: <UsersIcon />,
-      title: "Community Driven",
-      description: "Connect with developers, share ideas, and build amazing things together in a collaborative, open-source environment."
+      title: "🌍 Global Peer Network",
+      description:
+        "Connect with a diverse community of innovators worldwide. Collaborate, co-found, and create lasting impact.",
     },
     {
-      icon: <CodeBracketIcon />,
-      title: "Project Scaffolding",
-      description: "Get a head start with our powerful CLI tools that generate boilerplate code for various stacks, saving you time and effort."
+      title: "🛠️ Venture Building Toolkit",
+      description:
+        "Turn sparks into startups with our structured blueprints, curated resources, and step-by-step guidance.",
     },
     {
-      icon: <RocketLaunchIcon />,
-      title: "Instant Deployment",
-      description: "Seamlessly deploy your projects to the cloud with our integrated CI/CD pipelines, making your work instantly accessible."
-    }
+      title: "🎓 Expert Mentorship",
+      description:
+        "Learn directly from entrepreneurs, industry leaders, and professors invested in your journey.",
+    },
   ];
 
   return (
-    <div className="bg-slate-50 min-h-screen font-sans text-slate-800">
-      <div className="container mx-auto px-4 py-16 sm:py-24">
-        
-        {/* Header Section */}
-        <header className="text-center max-w-3xl mx-auto mb-16">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-slate-900 tracking-tight mb-4">
-            Build the Future of Open Source.
-          </h1>
-          <p className="text-lg sm:text-xl text-slate-600">
-            OpenStart is a launchpad designed to help you initiate, collaborate on, and scale your open-source projects faster than ever before.
-          </p>
-        </header>
+    <div className="relative min-h-screen bg-gradient-to-br from-black via-slate-900 to-black text-white flex flex-col items-center justify-center px-6 py-20 overflow-hidden">
+      <FloatingOrbs />
 
-        {/* Features Section */}
-        <section className="mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature) => (
-              <FeatureCard key={feature.title} icon={feature.icon} title={feature.title}>
-                {feature.description}
-              </FeatureCard>
-            ))}
-          </div>
-        </section>
+      {/* Hero Section */}
+      <motion.h1
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-5xl md:text-7xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 animate-gradient"
+      >
+        Ignite Your Vision.
+        <br />
+        Shape The Future.
+      </motion.h1>
 
-        {/* Future Goals Section */}
-        <section className="bg-white rounded-2xl p-8 sm:p-12 border border-slate-200 shadow-sm max-w-4xl mx-auto text-center mb-16">
-           <div className="flex items-center justify-center h-16 w-16 rounded-full bg-amber-100 text-amber-600 mb-6 mx-auto">
-             <LightBulbIcon className="w-10 h-10" />
-           </div>
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Our Roadmap for Tomorrow</h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-            We're constantly innovating. Our future plans include AI-powered code suggestions, deeper integration with version control platforms like GitHub and GitLab, and advanced analytics to help you track your project's health and community engagement.
-          </p>
-        </section>
-        
-        {/* Call to Action Section */}
-        <footer className="text-center">
-          <a
-            href="/"
-            className="inline-block bg-indigo-600 text-white font-semibold text-lg px-8 py-4 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-300 transform hover:scale-105"
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6, duration: 1 }}
+        className="text-lg md:text-xl text-slate-300 max-w-2xl text-center mb-16"
+      >
+        OpenStart is your launchpad to innovate, collaborate, and lead. 🚀
+      </motion.p>
+
+      {/* Features Section */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0, y: 40 },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: { staggerChildren: 0.3 },
+          },
+        }}
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 max-w-6xl"
+      >
+        {features.map((f) => (
+          <motion.div
+            key={f.title}
+            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
-            Start Your Project Now
-          </a>
-        </footer>
+            <FeatureCard title={f.title} description={f.description} />
+          </motion.div>
+        ))}
+      </motion.div>
 
-      </div>
+      {/* Call to Action */}
+      <motion.a
+        href="/"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-fuchsia-500 via-purple-500 to-cyan-400 shadow-xl hover:shadow-cyan-500/50 transition-all"
+      >
+        Join the Next Generation of Founders
+      </motion.a>
+
+      {/* Gradient Animation */}
+      <style>
+        {`
+          @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+          }
+        `}
+      </style>
     </div>
   );
 }

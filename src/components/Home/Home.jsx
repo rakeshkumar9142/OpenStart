@@ -10,7 +10,7 @@ import {differentiators} from './differentiators.jsx'
 export default function OpenStartPage() {
     
     return (
-        <div className="bg-gray-900 text-white font-sans">
+        <div className="bg-gray-900 text-white font-sans box no-space">
             {/* Hero Section */}
             <header className="relative h-screen flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 z-0">
