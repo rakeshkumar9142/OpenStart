@@ -53,3 +53,73 @@
     animation: fadeIn-up 0.8s ease-out forwards;
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS for the interactive glow effect on the card */
+.card-glow {
+  position: relative;
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    400px circle at var(--mouse-x, -100px) var(--mouse-y, -100px),
+    rgba(147, 112, 219, 0.2), /* A translucent purple */
+    transparent 80%
+  );
+  border-radius: inherit;
+  z-index: -1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Keyframe animations for background blobs and fade-in effect */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Utility classes to apply the animations */
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
