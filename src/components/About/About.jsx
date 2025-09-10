@@ -344,13 +344,19 @@ export default function About() {
                     <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
                         Be part of the next generation of global entrepreneurs. Together, we can build a better future through innovation, collaboration, and youth empowerment.
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="px-8 py-4 bg-white text-indigo-900 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <div 
+                    
+                    className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Link
+                         to = {'/contact'}
+                         className="px-8 py-4 bg-white text-indigo-900 font-bold rounded-xl hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
                             Get Started Today
-                        </button>
-                        <button className="px-8 py-4 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-indigo-900 transition-all duration-300 transform hover:scale-105">
+                        </Link>
+                        <Link 
+                        to={'/about-learn-more'}
+                        className="px-8 py-4 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-indigo-900 transition-all duration-300 transform hover:scale-105">
                             Learn More
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

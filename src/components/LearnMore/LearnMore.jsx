@@ -1,6 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from 'react-router-dom';
 
+
+const MotionLink = motion.create(Link);
 // --- Floating Orbs Background ---
 const FloatingOrbs = () => {
   return (
@@ -117,14 +120,18 @@ export default function LearnMore() {
       </motion.div>
 
       {/* Call to Action */}
-      <motion.a
-        href="/"
+      <MotionLink
+         to = {'/contact'}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="px-10 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-fuchsia-500 via-purple-500 to-cyan-400 shadow-xl hover:shadow-cyan-500/50 transition-all"
-      >
-        Join the Next Generation of Founders
-      </motion.a>
+      > 
+     
+      
+         Join the Next Generation of Founders
+      
+       
+      </MotionLink>
 
       {/* Gradient Animation */}
       <style>
