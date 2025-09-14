@@ -3,23 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 // It should export a 'databases' object and 'ID'.
 import { databases, ID } from "../../appwrite/appwrite.js"; 
 
-// --- SVG Icon Components (for clarity) ---
-const CheckIcon = () => (
-  <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-  </svg>
-);
-const SuccessIcon = () => (
-  <svg className="w-16 h-16 text-green-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);
-const Spinner = () => (
-  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-  </svg>
-);
+import {CheckIcon,SuccessIcon,Spinner} from './Icons.jsx'
+
+
+
 
 // --- Reusable Form Field Components with Floating Labels ---
 const FloatingLabelInput = ({ id, name, type, value, onChange, error, label }) => (
@@ -148,7 +135,6 @@ export default function ContactForm() {
       const COLLECTION_ID = import.meta.env.VITE_APPWRITE_TABLE_ID_CONTACTS;
 
       // This log helps confirm if the variable is loaded. If it shows 'undefined', the .env file is the issue.
-      console.log("Using Collection ID:", COLLECTION_ID);
 
       if (!COLLECTION_ID) {
         throw new Error("Collection ID is missing. Please check your .env file and restart the server.");

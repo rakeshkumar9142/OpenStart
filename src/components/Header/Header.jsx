@@ -65,6 +65,7 @@ export default function Header() {
     const navLinks = [
         { to: "/", text: "Home" },
         { to: "/about", text: "About" },
+        { to: "/mentors", text: "Mentors" },
         { to: "/contact", text: "Contact" },
         { to: "/news", text: "News" },
     ];

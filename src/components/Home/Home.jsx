@@ -28,14 +28,15 @@ export default function OpenStartPage() {
                         OpenStart
                     </h1>
                     <p className="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-gray-300">
-                        Building the Next Generation of Global Entrepreneurs
-                    </p>
-                    <Link 
-                     to="/contact"
-                    className="mt-8 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105 ">
-                        
-                        Join the Movement
-                    </Link>
+    Building the Next Generation of Global Entrepreneurs
+</p>
+<Link 
+    to="/contact"
+    className="mt-6 px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-700 transition-transform transform hover:scale-105"
+>
+    Join the Movement
+</Link>
+
                 </div>
             </header>
 
@@ -49,9 +50,9 @@ export default function OpenStartPage() {
                         <h2 className="text-3xl font-bold text-indigo-400 mb-4">The Spark of a Visionary</h2>
                         <p className="text-gray-1000 text-center mb-5">
                             OpenStart is an ambitious project founded by <strong>Vikusyaaa</strong>, 
-                            a visionary young leader from Ukraine. Her entrepreneurial spark grew even 
-                            stronger after her project was ranked among the top 3 out of 250 teams worldwide 
-                            in the Nazarbayev University Summer Research Program 2025.
+                            a visionary young leader from Ukraine. Her entrepreneurial 
+                            spark grew even stronger after her project was ranked among the top 3 out of 250 teams worldwide 
+                            in the <br /> Nazarbayev University Summer Research Program 2025.
                         </p>
                         <p className="text-gray-1000">
                             The vision is simple yet powerful: break down geographical barriers and 
