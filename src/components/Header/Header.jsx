@@ -66,6 +66,7 @@ export default function Header() {
         { to: "/", text: "Home" },
         { to: "/about", text: "About" },
         { to: "/mentors", text: "Mentors" },
+        { to: "/ShowCase", text: "ShowCase" },
         { to: "/contact", text: "Contact" },
         { to: "/news", text: "News" },
     ];
