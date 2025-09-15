@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
+import { Link } from 'react-router-dom';
+import { Contact } from "lucide-react";
 
 // --- STYLES (Glitch + Cursor) ---
 const styles = `
@@ -222,7 +224,11 @@ function CohortAlphaPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.1, duration: 0.5 }}
           >
-            Initiate Application
+           <Link
+          to="/contact"
+           >
+           Initiate Application
+           </Link>
           </motion.button>
         </section>
 
@@ -316,7 +322,11 @@ function CohortAlphaPage() {
           </h2>
           <button className="bg-teal-500 text-white font-bold px-8 py-4 rounded-lg text-xl transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/30">
             <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-48 group-hover:h-48 opacity-10"></span>
-            <span className="relative">Join Cohort Alpha</span>
+           <Link
+            to="/contact"
+           >
+           <span className="relative">Join Cohort Alpha</span>
+           </Link>
           </button>
         </AnimatedSection>
       </main>
