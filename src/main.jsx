@@ -13,7 +13,9 @@ import Features from './components/Features/Features.jsx'
 import Mentors from './components/Mentors/Mentors.jsx';
 import ShowCase from './components/ShowCase/ShowCase.jsx'
 import LearnMore from './components/LearnMore/LearnMore.jsx';
-
+import Alpha from './components/Cohorts/Alpha/Alpha.jsx';
+import Beta from './components/Cohorts/Beta/Beta.jsx';
+import Gama from './components/Cohorts/Gama/Gama.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +28,9 @@ const router = createBrowserRouter(
       <Route path='mentors' element={<Mentors />} /> 
       <Route path='showcase' element={<ShowCase />} /> 
       <Route path='about-learn-more' element={<LearnMore />} /> 
+      <Route path="/cohorts/alpha" element={<Alpha />} />
+          <Route path="/cohorts/beta" element={<Beta />} />
+          <Route path="/cohorts/gama" element={<Gama />} />
     </Route>
   )
 )

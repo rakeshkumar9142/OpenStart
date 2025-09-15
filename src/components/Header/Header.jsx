@@ -1,207 +1,229 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import PiCon from "../../assets/Gemini1logo.png"
-// Using a placeholder for the logo so the component is self-contained and runnable.
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// ASSETS & DATA
+import PiCon from "../../assets/Gemini1logo.png";
+import navLinks from './navLinks'; // Ensure this path is correct
+import { MenuIcon, CloseIcon, ChevronDownIcon, WhatsAppIcon, TelegramIcon } from './Icons.jsx'; // Ensure this path is correct
+
 const OpenStartLogo = PiCon;
 
-// SVG Icons for the mobile menu toggle for a clean, dependency-free implementation.
-const MenuIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
-    </svg>
-);
-
-const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-);
-
-// News Icon for the dropdown
-const NewsIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-    </svg>
-);
-
-// Chevron Down Icon for dropdown indicator
-const ChevronDownIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-);
-
-// Inlined WhatsApp SVG Icon
-const WhatsAppIcon = ({ className }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className={className}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-    >
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.655 4.398 1.919 6.166l-.362 1.254 1.27 1.241z" />
-    </svg>
-);
-
-// --- ADDED: Inlined Telegram SVG Icon ---
-const TelegramIcon = ({ className }) => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className={className}
-        viewBox="0 0 24 24"
-        fill="currentColor"
-    >
-        <path d="M24 12c0-6.627-5.373-12-12-12s-12 5.373-12 12 5.373 12 12 12 12-5.373 12-12zm-18.435-1.429l3.541 1.348 4.09 3.868-4.635 4.331c-.38-.21-.733-.463-1.056-.759l-1.94-8.788zm15.435-2.571l-12.053 4.852 10.941 10.179c.923-.463 1.748-1.13 2.435-1.948l-1.323-13.083zm-3.48 2.029l-4.52 4.234-3.541-1.347 8.061-5.621z"/>
-    </svg>
-);
-
 export default function Header() {
-    // State to manage the visibility of the mobile menu
+    // State for the mobile menu
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    // State to manage the News dropdown
-    const [isNewsOpen, setIsNewsOpen] = useState(false);
+    // State for the currently open dropdown on desktop
+    const [openDesktopSubmenu, setOpenDesktopSubmenu] = useState(null);
 
-    // Navigation links data for easier mapping and maintenance
-    const navLinks = [
-        { to: "/", text: "Home" },
-        { to: "/about", text: "About" },
-        { to: "/mentors", text: "Mentors" },
-        { to: "/ShowCase", text: "ShowCase" },
-        { to: "/contact", text: "Contact" },
-        { to: "/news", text: "News" },
-    ];
+    const desktopNavRef = useRef(null);
+    const mobileNavRef = useRef(null);
 
-    // Style for NavLink, making it reusable
+    // Custom hook logic to detect clicks outside an element
+    const useOnClickOutside = (ref, handler) => {
+        useEffect(() => {
+            const listener = (event) => {
+                if (!ref.current || ref.current.contains(event.target)) {
+                    return;
+                }
+                handler(event);
+            };
+            document.addEventListener("mousedown", listener);
+            document.addEventListener("touchstart", listener);
+            return () => {
+                document.removeEventListener("mousedown", listener);
+                document.removeEventListener("touchstart", listener);
+            };
+        }, [ref, handler]);
+    };
+
+    // Close menus on outside click
+    useOnClickOutside(desktopNavRef, () => setOpenDesktopSubmenu(null));
+    useOnClickOutside(mobileNavRef, () => setIsMenuOpen(false));
+
+    // Close menus on 'Escape' key press
+    useEffect(() => {
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') {
+                setIsMenuOpen(false);
+                setOpenDesktopSubmenu(null);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, []);
+
+    // Prevent body scrolling when mobile menu is open
+    useEffect(() => {
+        document.body.style.overflow = isMenuOpen ? 'hidden' : 'unset';
+    }, [isMenuOpen]);
+    
+    // Styling for active NavLink
     const navLinkClass = ({ isActive }) =>
-        `relative font-medium text-white transition-colors duration-300 hover:text-indigo-400 after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-full after:scale-x-0 after:bg-indigo-400 after:transition-transform after:duration-300 after:origin-left ${
-            isActive ? "text-indigo-400 after:scale-x-100" : ""
+        `relative font-medium text-gray-300 transition-colors duration-300 hover:text-white after:absolute after:left-0 after:-bottom-1.5 after:h-0.5 after:w-full after:scale-x-0 after:bg-indigo-400 after:transition-transform after:duration-300 after:origin-left ${
+            isActive ? "text-white after:scale-x-100" : ""
         }`;
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-gray-900/80 backdrop-blur-sm border-b border-gray-800">
+        <header className="sticky top-0 z-50 w-full bg-gray-900/80 backdrop-blur-sm border-b border-white/10">
             <nav className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="flex h-20 items-center justify-between">
                     {/* Logo */}
                     <Link to="/" className="flex-shrink-0">
-                        <img
-                            src={OpenStartLogo}
-                            className="h-14 w-14 rounded-full object-cover transition-transform duration-300 hover:scale-110"
-                            alt="OpenStart Logo"
-                        />
+                        <img src={OpenStartLogo} className="h-14 w-14 rounded-full object-cover transition-transform duration-300 hover:scale-110 hover:rotate-6" alt="OpenStart Logo" />
                     </Link>
 
-                    {/* Desktop Navigation Links - Centered */}
-                    <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex lg:items-center lg:gap-x-10">
-                        {navLinks.map((link) => (
-                             <NavLink key={link.to} to={link.to} className={navLinkClass}>
-                                {link.text}
-                            </NavLink>
+                    {/* Desktop Navigation */}
+                    <div ref={desktopNavRef} className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex lg:items-center lg:gap-x-10">
+                        {navLinks.map((link, index) => (
+                            <div key={index} className="relative">
+                                {link.submenu ? (
+                                    <>
+                                        <button
+                                            onClick={() => setOpenDesktopSubmenu(openDesktopSubmenu === index ? null : index)}
+                                            className="flex items-center gap-1 font-medium text-gray-300 transition-colors duration-300 hover:text-white"
+                                            aria-haspopup="true"
+                                            aria-expanded={openDesktopSubmenu === index}
+                                        >
+                                            {link.text}
+                                            <ChevronDownIcon className={`h-4 w-4 transition-transform duration-300 ${openDesktopSubmenu === index ? 'rotate-180' : ''}`} />
+                                        </button>
+                                        <AnimatePresence>
+                                            {openDesktopSubmenu === index && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                    className="absolute top-full left-1/2 mt-4 w-48 -translate-x-1/2 rounded-lg bg-gray-800/90 backdrop-blur-sm border border-white/10 shadow-xl p-2"
+                                                >
+                                                    {link.submenu.map((subItem) => (
+                                                        <NavLink key={subItem.to} to={subItem.to} onClick={() => setOpenDesktopSubmenu(null)} className={({ isActive }) => `block w-full text-left rounded-md px-4 py-2 text-sm ${isActive ? 'bg-indigo-600 text-white' : 'text-gray-200 hover:bg-indigo-600/50'}`}>
+                                                            {subItem.text}
+                                                        </NavLink>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </>
+                                ) : (
+                                    <NavLink to={link.to} className={navLinkClass}>
+                                        {link.text}
+                                    </NavLink>
+                                )}
+                            </div>
                         ))}
-                        
-                        {/* News Dropdown */}
-                       
                     </div>
-
+                    
                     {/* Action Buttons */}
                     <div className="hidden lg:flex lg:items-center lg:gap-x-4">
-                        <Link
-                            to="#"
-                            className="rounded-md px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:text-white"
-                        >
-                            Log in
+                        <Link to="/login" className="rounded-md px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-white/10 hover:text-white">Log in</Link>
+                        <Link to="https://t.me/OpenStartProject_bot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-md bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30">
+                            <TelegramIcon className="h-5 w-5 mr-2" /> Join Us
                         </Link>
-                        {/* --- ADDED TELEGRAM BUTTON --- */}
-                        <Link
-                            to="https://t.me/OpenStartProject_bot" // Replace with your Telegram link
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center rounded-md bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105"
-                        >
-                            <TelegramIcon className="h-5 w-5 mr-2" />
-                            Join Us
-                        </Link>
-                        <Link
-                            to="https://wa.me/919905307658"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center rounded-md bg-gradient-to-r from-green-500 to-teal-500 px-4 py-2 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105"
-                        >
-                            <WhatsAppIcon className="h-5 w-5 mr-2" />
-                            Chat Now
-                        </Link>
+                        {/* You can add your WhatsApp button here if needed */}
                     </div>
-
+                    
                     {/* Mobile Menu Button */}
                     <div className="lg:hidden">
-                        <button
-                            onClick={() => setIsMenuOpen(!isMenuOpen)}
-                            className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                            aria-expanded={isMenuOpen}
-                        >
+                        <button onClick={() => setIsMenuOpen(true)} className="inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:bg-white/10 hover:text-white">
                             <span className="sr-only">Open main menu</span>
-                            {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+                            <MenuIcon />
                         </button>
                     </div>
                 </div>
             </nav>
 
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="lg:hidden" id="mobile-menu">
-                    <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                        {navLinks.map((link) => (
-                             <NavLink 
-                                key={link.to} 
-                                to={link.to} 
-                                className={({isActive}) => `block rounded-md px-3 py-2 text-base font-medium ${isActive ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'}`}
-                                onClick={() => setIsMenuOpen(false)} // Close menu on click
-                            >
-                                {link.text}
-                            </NavLink>
-                        ))}
-                        
-                        {/* News in Mobile Menu */}
-                        <Link
-                            to="/news"
-                            className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            <div className="flex items-center gap-2">
-                                <NewsIcon />
-                                News
-                            </div>
-                        </Link>
-                        
-                        <div className="border-t border-gray-700 pt-4 mt-4 flex flex-col items-start space-y-3">
-                             <Link
-                                to="#"
-                                className="w-full text-left rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                            >
-                                Log in
-                            </Link>
-                             {/* --- ADDED TELEGRAM BUTTON TO MOBILE MENU --- */}
-                            <Link
-                                to="https://t.me/@RakeshKumar9905" // Replace with your Telegram link
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full inline-flex items-center justify-center rounded-md bg-gradient-to-r from-sky-500 to-blue-600 px-3 py-2 text-base font-medium text-white shadow-lg"
-                            >
-                                 <TelegramIcon className="h-5 w-5 mr-2" />
-                                Join on Telegram
-                            </Link>
-                            <Link
-                                to="https://wa.me/919905307658"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full inline-flex items-center justify-center rounded-md bg-gradient-to-r from-green-500 to-teal-500 px-3 py-2 text-base font-medium text-white shadow-lg"
-                            >
-                                 <WhatsAppIcon className="h-5 w-5 mr-2" />
-                                Chat on WhatsApp
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Mobile Menu Overlay */}
+            <AnimatePresence>
+                {isMenuOpen && <MobileMenu navLinks={navLinks} navRef={mobileNavRef} onClose={() => setIsMenuOpen(false)} />}
+            </AnimatePresence>
         </header>
+    );
+}
+
+// Sub-component for the Mobile Menu, kept in the same file
+const MobileMenu = ({ navLinks, navRef, onClose }) => {
+    const [openSubmenu, setOpenSubmenu] = useState(null);
+
+    // Variants for container animation
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { 
+            opacity: 1,
+            transition: { staggerChildren: 0.05 }
+        },
+        exit: { opacity: 0 }
+    };
+    
+    // Variants for list item animation
+    const itemVariants = {
+        hidden: { opacity: 0, y: -20 },
+        visible: { opacity: 1, y: 0 },
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-gray-900/70 backdrop-blur-sm lg:hidden"
+        >
+            <motion.div
+                ref={navRef}
+                variants={{
+                    hidden: { y: "-100%", opacity: 0 },
+                    visible: { y: "0%", opacity: 1 },
+                    exit: { y: "-100%", opacity: 0 }
+                }}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute top-0 left-0 w-full bg-gray-900 border-b border-white/10 shadow-lg p-4"
+            >
+                <div className="flex justify-between items-center mb-6">
+                    <Link to="/" onClick={onClose}><img src={OpenStartLogo} className="h-12 w-12 rounded-full" alt="OpenStart Logo" /></Link>
+                    <button onClick={onClose} className="p-2 text-gray-300 hover:text-white"><CloseIcon /></button>
+                </div>
+                
+                <motion.div variants={containerVariants} className="space-y-2">
+                    {navLinks.map((link, index) => (
+                        <motion.div key={index} variants={itemVariants}>
+                            {link.submenu ? (
+                                <div>
+                                    <button onClick={() => setOpenSubmenu(openSubmenu === index ? null : index)} className="w-full flex justify-between items-center rounded-md px-3 py-2 text-lg font-medium text-gray-300 hover:bg-white/10 hover:text-white">
+                                        <span>{link.text}</span>
+                                        <ChevronDownIcon className={`h-5 w-5 transition-transform ${openSubmenu === index ? 'rotate-180' : ''}`} />
+                                    </button>
+                                    <AnimatePresence>
+                                        {openSubmenu === index && (
+                                            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden pl-4 mt-1 space-y-1">
+                                                {link.submenu.map((subItem) => (
+                                                    <NavLink key={subItem.to} to={subItem.to} onClick={onClose} className={({ isActive }) => `block rounded-md px-3 py-2 text-base font-medium ${isActive ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-white/10'}`}>
+                                                        {subItem.text}
+                                                    </NavLink>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ) : (
+                                <NavLink to={link.to} onClick={onClose} className={({ isActive }) => `block rounded-md px-3 py-2 text-lg font-medium ${isActive ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-white/10'}`}>
+                                    {link.text}
+                                </NavLink>
+                            )}
+                        </motion.div>
+                    ))}
+                    {/* Mobile Action Buttons */}
+                    <motion.div variants={itemVariants} className="border-t border-white/10 pt-4 mt-4 flex flex-col items-start space-y-3">
+                         <Link to="/login" onClick={onClose} className="w-full text-center rounded-md px-3 py-3 text-lg font-medium text-gray-300 hover:bg-white/10 hover:text-white">Log in</Link>
+                         <Link to="https://t.me/OpenStartProject_bot" target="_blank" rel="noopener noreferrer" className="w-full inline-flex items-center justify-center rounded-md bg-gradient-to-r from-sky-500 to-blue-600 px-3 py-3 text-lg font-medium text-white shadow-lg">
+                             <TelegramIcon className="h-5 w-5 mr-2" /> Join on Telegram
+                         </Link>
+                    </motion.div>
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 }
