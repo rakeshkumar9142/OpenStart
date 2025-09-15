@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
-import { Sparkles, Rocket, Target, DollarSign, Lightbulb, Users } from "lucide-react"; // <-- nice icons
 
-// --- Global Styles (Glitch + Cursor) ---
+// --- STYLES (Glitch + Cursor) ---
 const styles = `
   .glitch {
     animation: glitch 1.5s linear infinite;
@@ -68,6 +67,8 @@ const styles = `
     transition: all 0.2s ease-out;
     transform: translate(-50%, -50%);
   }
+  body:hover #cursor-outline { opacity: 0.5; }
+  body:hover #cursor-dot { opacity: 1; }
 `;
 
 // --- Countdown Timer ---
@@ -95,18 +96,18 @@ const CountdownTimer = () => {
   }, []);
 
   return (
-    <div className="flex justify-center gap-6 p-6 bg-black/40 backdrop-blur-md rounded-2xl border border-teal-400/30 shadow-lg shadow-teal-500/20">
+    <div className="flex justify-center gap-4 md:gap-8 p-6 bg-black/30 backdrop-blur-sm rounded-2xl border border-teal-500/20 max-w-lg mx-auto">
       {Object.keys(timeLeft).length ? (
         Object.entries(timeLeft).map(([unit, value]) => (
           <div key={unit} className="text-center">
-            <span className="text-4xl font-extrabold text-white tracking-wide drop-shadow-md">
+            <span className="text-4xl md:text-5xl font-bold text-white tracking-wider">
               {String(value).padStart(2, "0")}
             </span>
             <span className="block text-sm text-teal-300 uppercase">{unit}</span>
           </div>
         ))
       ) : (
-        <span className="text-xl font-bold text-white">
+        <span className="text-2xl font-bold text-white">
           Applications have closed!
         </span>
       )}
@@ -144,7 +145,7 @@ const AnimatedSection = ({ children, className }) => {
   );
 };
 
-// --- MAIN PAGE ---
+// --- MAIN COMPONENT ---
 function CohortAlphaPage() {
   const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
 
@@ -154,20 +155,20 @@ function CohortAlphaPage() {
     return () => window.removeEventListener("mousemove", handleMove);
   }, []);
 
-  const skills = [
-    { icon: <Rocket />, label: "Lean Startup" },
-    { icon: <Target />, label: "Market Research" },
-    { icon: <Lightbulb />, label: "MVP Validation" },
-    { icon: <DollarSign />, label: "Startup Finance" },
-    { icon: <Users />, label: "Business Model" },
-    { icon: <Sparkles />, label: "Pitching" },
+  const learningTopics = [
+    "Lean Startup",
+    "Market Research",
+    "MVP Validation",
+    "Business Model",
+    "Startup Finance",
+    "Pitching",
   ];
 
   return (
-    <div className="bg-[#0D0C1D] text-gray-200 font-sans overflow-x-hidden cursor-none relative">
+    <div className="bg-[#0D0C1D] text-gray-200 font-sans overflow-x-hidden cursor-none">
       <style>{styles}</style>
 
-      {/* Cursor */}
+      {/* Custom Cursor */}
       <div
         id="cursor-dot"
         style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
@@ -177,146 +178,148 @@ function CohortAlphaPage() {
         style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
       />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#0D0C1D] to-black/80"></div>
+      {/* Background */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 z-0"></div>
 
-        <motion.h1
-          className="text-5xl sm:text-7xl font-extrabold text-white mb-6 relative z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className="glitch" data-text="Genesis Program">
-            Genesis Program
-          </span>
-          <span className="block mt-4 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-purple-400">
-            Cohort Alpha 🚀
-          </span>
-        </motion.h1>
+      {/* Main Content */}
+      <main className="container mx-auto px-6 py-12 relative z-10">
+        {/* Hero */}
+        <section className="text-center min-h-screen flex flex-col justify-center">
+          <motion.h1
+            className="text-4xl sm:text-6xl font-extrabold text-white mb-4 relative inline-block mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="glitch" data-text="Genesis Program">
+              Genesis Program
+            </span>
+            <span className="block mt-4 text-teal-400">Cohort Alpha 🚀</span>
+          </motion.h1>
 
-        <motion.p
-          className="max-w-3xl mx-auto text-lg sm:text-xl text-gray-300 mb-10 z-10"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
-          A 10-week mission to transform your spark into a world-changing
-          venture.
-        </motion.p>
+          <motion.p
+            className="max-w-3xl mx-auto text-lg text-gray-300 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            Your 10-week mission to forge an idea into a world-changing venture
+            starts now.
+          </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="z-10"
-        >
-          <CountdownTimer />
-        </motion.div>
+          <motion.div
+            className="mb-10"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            <CountdownTimer />
+          </motion.div>
 
-        <motion.button
-          className="mt-8 px-10 py-4 rounded-lg text-lg font-bold text-white bg-gradient-to-r from-teal-500 to-purple-500 hover:shadow-[0_0_30px_#00f2ea] transition-all duration-300 z-10"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Initiate Application
-        </motion.button>
-      </section>
+          <motion.button
+            className="bg-teal-500/10 border-2 border-teal-500 text-teal-300 font-bold px-8 py-3 rounded-lg text-lg transform hover:bg-teal-500 hover:text-white hover:shadow-[0_0_20px_theme(colors.teal.500)] transition-all duration-300 self-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1, duration: 0.5 }}
+          >
+            Initiate Application
+          </motion.button>
+        </section>
 
-      {/* Mission Timeline */}
-      <AnimatedSection className="py-20">
-        <h2 className="text-3xl font-bold text-center text-white mb-16">
-          Mission Phases
-        </h2>
-        <div className="relative max-w-3xl mx-auto">
-          <div className="absolute left-1/2 w-1 h-full bg-gradient-to-b from-teal-400/40 to-purple-400/40 transform -translate-x-1/2"></div>
+        {/* Mission Timeline */}
+        <AnimatedSection className="py-20">
+          <h2 className="text-3xl font-bold text-center text-white mb-16">
+            Mission Phases
+          </h2>
+          <div className="relative max-w-2xl mx-auto">
+            <div className="absolute left-4 md:left-1/2 w-1 h-full bg-white/10 transform md:-translate-x-1/2"></div>
 
-          {[
-            {
-              phase: "Phase 01: Recruitment",
-              details: "Applications Open: Sep 22 - Oct 28",
-              color: "text-teal-400",
-            },
-            {
-              phase: "Phase 02: Incubation",
-              details: "Program Duration: Nov '25 – Jan '26",
-              color: "text-purple-400",
-            },
-          ].map((item, idx) => (
-            <div
-              key={idx}
-              className={`mb-16 flex items-center w-full ${
-                idx % 2 === 0 ? "flex-row" : "flex-row-reverse"
-              }`}
-            >
-              <div className="z-20 flex items-center bg-[#0D0C1D] w-10 h-10 rounded-full border-2 border-teal-400 shadow-md"></div>
-              <div className="p-6 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 w-full sm:w-1/2 mx-4 shadow-md">
-                <p className={`${item.color} font-semibold`}>{item.phase}</p>
-                <h3 className="text-lg font-bold text-white">{item.details}</h3>
+            {/* Phase 1 */}
+            <div className="mb-16 flex items-center w-full">
+              <div className="hidden md:block w-1/2"></div>
+              <div className="z-20 flex items-center bg-[#0D0C1D] shadow-md w-8 h-8 rounded-full border-2 border-teal-400"></div>
+              <div className="p-6 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10 w-full md:w-1/2 ml-4 md:ml-0 md:pl-10">
+                <p className="text-teal-400 font-semibold">
+                  Phase 01: Recruitment
+                </p>
+                <h3 className="text-xl font-bold text-white">
+                  Applications Open: Sep 22 - Oct 28
+                </h3>
               </div>
             </div>
-          ))}
-        </div>
-      </AnimatedSection>
 
-      {/* Skills */}
-      <AnimatedSection className="py-16">
-        <h2 className="text-3xl font-bold text-center text-white mb-12">
-          Skill Unlocks
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {skills.map((s) => (
-            <motion.div
-              key={s.label}
-              className="group p-6 flex flex-col items-center justify-center text-center bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 shadow-md transition-all duration-300"
-              whileHover={{
-                y: -10,
-                scale: 1.05,
-                boxShadow: "0 0 20px #00f2ea",
-              }}
-            >
-              <div className="text-3xl text-teal-400 mb-3">{s.icon}</div>
-              <h3 className="font-bold text-lg text-white group-hover:text-teal-300">
-                {s.label}
-              </h3>
-            </motion.div>
-          ))}
-        </div>
-      </AnimatedSection>
+            {/* Phase 2 */}
+            <div className="mb-16 flex items-center w-full">
+              <div className="hidden md:block w-1/2 md:pr-10 text-right"></div>
+              <div className="z-20 flex items-center bg-[#0D0C1D] shadow-md w-8 h-8 rounded-full border-2 border-teal-400"></div>
+              <div className="p-6 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10 w-full md:w-1/2 ml-4 md:ml-0 md:pl-10">
+                <p className="text-purple-400 font-semibold">
+                  Phase 02: Incubation
+                </p>
+                <h3 className="text-xl font-bold text-white">
+                  Program Duration: Nov '25 – Jan '26
+                </h3>
+              </div>
+            </div>
+          </div>
+        </AnimatedSection>
 
-      {/* Commanders */}
-      <AnimatedSection className="py-16 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">Field Commanders</h2>
-        <p className="text-lg text-gray-300 mb-10">
-          5 industry titans guiding your journey. Full profiles remain classified
-          until launch.
-        </p>
-        <div className="flex justify-center gap-6">
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="w-20 h-20 rounded-full bg-gradient-to-r from-teal-400/20 to-purple-400/20 border border-white/10 flex items-center justify-center text-2xl font-bold text-teal-500/60"
-              whileHover={{ scale: 1.1, rotate: 5 }}
-            >
-              ?
-            </motion.div>
-          ))}
-        </div>
-      </AnimatedSection>
+        {/* Skills */}
+        <AnimatedSection className="py-16">
+          <h2 className="text-3xl font-bold text-center text-white mb-12">
+            Skill Unlocks
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {learningTopics.map((topic) => (
+              <motion.div
+                key={topic}
+                className="group p-6 text-center bg-black/30 backdrop-blur-sm rounded-2xl border border-white/10 transition-all duration-300"
+                whileHover={{
+                  y: -10,
+                  scale: 1.05,
+                  border: "1px solid #00f2ea",
+                }}
+              >
+                <h3 className="font-bold text-lg md:text-xl text-white transition-colors duration-300 group-hover:text-teal-300">
+                  {topic}
+                </h3>
+              </motion.div>
+            ))}
+          </div>
+        </AnimatedSection>
 
-      {/* Final CTA */}
-      <AnimatedSection className="text-center py-20">
-        <h2 className="text-4xl font-bold text-white mb-6">
-          Your Legacy Awaits.
-        </h2>
-        <motion.button
-          className="px-12 py-5 rounded-lg text-xl font-bold text-white bg-gradient-to-r from-teal-500 to-purple-500 hover:shadow-[0_0_40px_#00f2ea] transition-all duration-300"
-          whileHover={{ scale: 1.07 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Join Cohort Alpha
-        </motion.button>
-      </AnimatedSection>
+        {/* Field Commanders */}
+        <AnimatedSection className="py-16 text-center max-w-4xl mx-auto">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Field Commanders
+          </h2>
+          <p className="text-lg leading-relaxed text-gray-300 mb-8">
+            Receive direct guidance from 5 industry titans. Full profiles are
+            classified until program commencement.
+          </p>
+          <div className="flex justify-center gap-4">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="w-20 h-20 bg-black/30 border border-white/10 rounded-full flex items-center justify-center text-2xl font-bold text-teal-500/50"
+              >
+                ?
+              </div>
+            ))}
+          </div>
+        </AnimatedSection>
+
+        {/* CTA */}
+        <AnimatedSection className="text-center py-20">
+          <h2 className="text-4xl font-bold text-white mb-4">
+            Your Legacy Awaits.
+          </h2>
+          <button className="bg-teal-500 text-white font-bold px-8 py-4 rounded-lg text-xl transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/30">
+            <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-48 group-hover:h-48 opacity-10"></span>
+            <span className="relative">Join Cohort Alpha</span>
+          </button>
+        </AnimatedSection>
+      </main>
     </div>
   );
 }
