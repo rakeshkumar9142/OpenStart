@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 // --- HELPER COMPONENTS ---
 
 // Countdown Timer Component
@@ -88,7 +88,11 @@ function CohortAlphaPage() {
                     </div>
                     <button className="bg-teal-500 text-white font-bold px-8 py-3 rounded-lg text-lg transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/20">
                          <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
+                        <Link
+                        to={"/contact"}
+                        >
                         <span className="relative">Apply Now</span>
+                        </Link>
                     </button>
                 </section>
 
@@ -178,7 +182,11 @@ function CohortAlphaPage() {
                     </p>
                     <button className="bg-teal-500 text-white font-bold px-8 py-3 rounded-lg text-lg transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/20">
                          <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
+                        <Link
+                        to="/contact"
+                        >
                         <span className="relative">Apply to Cohort Alpha</span>
+                        </Link>
                     </button>
                 </section>
             </main>
