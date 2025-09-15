@@ -1,337 +1,200 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, useInView, useAnimation } from "framer-motion";
-import { Link } from 'react-router-dom';
-import { Contact } from "lucide-react";
+import React, { useState, useEffect } from 'react';
 
-// --- STYLES (Glitch + Cursor) ---
-const styles = `
-  .glitch {
-    animation: glitch 1.5s linear infinite;
-    position: relative;
-  }
-  @keyframes glitch {
-    2%,64% { transform: translate(2px,0) skew(0deg); }
-    4%,60% { transform: translate(-2px,0) skew(0deg); }
-    62% { transform: translate(0,0) skew(5deg); }
-  }
-  .glitch:before,
-  .glitch:after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: #0D0C1D;
-    overflow: hidden;
-  }
-  .glitch:before {
-    left: 3px;
-    text-shadow: -2px 0 #00f2ea;
-    animation: glitch-anim-1 2.5s linear infinite reverse;
-  }
-  .glitch:after {
-    left: -3px;
-    text-shadow: -2px 0 #ff00c1;
-    animation: glitch-anim-2 2s linear infinite reverse;
-  }
-  @keyframes glitch-anim-1 {
-    0%,100% { clip-path: inset(50% 0 50% 0); }
-    25% { clip-path: inset(0 0 100% 0); }
-    50% { clip-path: inset(100% 0 0 0); }
-    75% { clip-path: inset(0 100% 0 0); }
-  }
-  @keyframes glitch-anim-2 {
-    0%,100% { clip-path: inset(0 50% 100% 50%); }
-    25% { clip-path: inset(50% 0 0 0); }
-    50% { clip-path: inset(0 0 50% 0); }
-    75% { clip-path: inset(100% 0 0 0); }
-  }
+// --- HELPER COMPONENTS ---
 
-  #cursor-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #00f2ea;
-    border-radius: 50%;
-    position: fixed;
-    z-index: 50;
-    pointer-events: none;
-    box-shadow: 0 0 10px #00f2ea, 0 0 20px #00f2ea;
-    transition: transform 0.1s ease-out;
-    transform: translate(-50%, -50%);
-  }
-  #cursor-outline {
-    width: 30px;
-    height: 30px;
-    border: 2px solid #00f2ea;
-    border-radius: 50%;
-    position: fixed;
-    z-index: 50;
-    pointer-events: none;
-    transition: all 0.2s ease-out;
-    transform: translate(-50%, -50%);
-  }
-  body:hover #cursor-outline { opacity: 0.5; }
-  body:hover #cursor-dot { opacity: 1; }
-`;
-
-// --- Countdown Timer ---
+// Countdown Timer Component
 const CountdownTimer = () => {
-  const calculateTimeLeft = () => {
-    const targetDate = new Date("2025-10-28T23:59:59");
-    const now = new Date();
-    const diff = targetDate - now;
+    const calculateTimeLeft = () => {
+        const difference = +new Date("2025-10-28T23:59:59") - +new Date();
+        let timeLeft = {};
 
-    if (diff <= 0) return {};
-
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((diff / 1000 / 60) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
+        if (difference > 0) {
+            timeLeft = {
+                days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                minutes: Math.floor((difference / 1000 / 60) % 60),
+                seconds: Math.floor((difference / 1000) % 60),
+            };
+        }
+        return timeLeft;
     };
-  };
 
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
-  useEffect(() => {
-    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setTimeLeft(calculateTimeLeft());
+        }, 1000);
+        return () => clearTimeout(timer);
+    });
 
-  return (
-    <div className="flex justify-center gap-4 md:gap-8 p-6 bg-black/30 backdrop-blur-sm rounded-2xl border border-teal-500/20 max-w-lg mx-auto">
-      {Object.keys(timeLeft).length ? (
-        Object.entries(timeLeft).map(([unit, value]) => (
-          <div key={unit} className="text-center">
-            <span className="text-4xl md:text-5xl font-bold text-white tracking-wider">
-              {String(value).padStart(2, "0")}
-            </span>
-            <span className="block text-sm text-teal-300 uppercase">{unit}</span>
-          </div>
-        ))
-      ) : (
-        <span className="text-2xl font-bold text-white">
-          Applications have closed!
-        </span>
-      )}
-    </div>
-  );
+    const timerComponents = Object.keys(timeLeft).map((interval) => {
+        if (!timeLeft[interval] && timeLeft[interval] !== 0) {
+            return null;
+        }
+        return (
+            <div key={interval} className="text-center">
+                <span className="text-4xl md:text-5xl font-bold text-white tracking-wider">
+                    {String(timeLeft[interval]).padStart(2, '0')}
+                </span>
+                <span className="block text-sm text-teal-300 uppercase">{interval}</span>
+            </div>
+        );
+    });
+
+    return (
+        <div className="flex justify-center gap-4 md:gap-8 p-6 bg-black/20 backdrop-blur-sm rounded-2xl border border-white/10 max-w-lg mx-auto">
+            {timerComponents.length ? timerComponents : <span className="text-2xl font-bold text-white">Applications have closed!</span>}
+        </div>
+    );
 };
 
-// --- Reusable Animation Section ---
-const AnimatedSection = ({ children, className }) => {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (inView) controls.start("visible");
-  }, [inView, controls]);
-
-  return (
-    <motion.section
-      ref={ref}
-      className={className}
-      initial="hidden"
-      animate={controls}
-      variants={{
-        hidden: { opacity: 0, y: 50 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: "easeOut" },
-        },
-      }}
-    >
-      {children}
-    </motion.section>
-  );
-};
+// Custom Icon Components
+const MissionIcon = () => (
+    <svg className="w-6 h-6 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 012-2h2a2 2 0 012 2v6m-8-12V5a2 2 0 012-2h4a2 2 0 012 2v2m-6 9h6"></path></svg>
+);
+const SkillIcon = () => (
+    <svg className="w-8 h-8 mb-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+);
 
 // --- MAIN COMPONENT ---
+
 function CohortAlphaPage() {
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
+    const learningTopics = [
+        "Lean Startup", "Market Research", "MVP Validation", "Business Model", "Startup Finance", "Pitching"
+    ];
 
-  useEffect(() => {
-    const handleMove = (e) => setCursorPos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  const learningTopics = [
-    "Lean Startup",
-    "Market Research",
-    "MVP Validation",
-    "Business Model",
-    "Startup Finance",
-    "Pitching",
-  ];
-
-  return (
-    <div className="bg-[#0D0C1D] text-gray-200 font-sans overflow-x-hidden cursor-none">
-      <style>{styles}</style>
-
-      {/* Custom Cursor */}
-      <div
-        id="cursor-dot"
-        style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
-      />
-      <div
-        id="cursor-outline"
-        style={{ left: `${cursorPos.x}px`, top: `${cursorPos.y}px` }}
-      />
-
-      {/* Background */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 z-0"></div>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-6 py-12 relative z-10">
-        {/* Hero */}
-        <section className="text-center min-h-screen flex flex-col justify-center">
-          <motion.h1
-            className="text-4xl sm:text-6xl font-extrabold text-white mb-4 relative inline-block mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="glitch" data-text="Genesis Program">
-              Genesis Program
-            </span>
-            <span className="block mt-4 text-teal-400">Cohort Alpha 🚀</span>
-          </motion.h1>
-
-          <motion.p
-            className="max-w-3xl mx-auto text-lg text-gray-300 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
-            Your 10-week mission to forge an idea into a world-changing venture
-            starts now.
-          </motion.p>
-
-          <motion.div
-            className="mb-10"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
-          >
-            <CountdownTimer />
-          </motion.div>
-
-          <motion.button
-            className="bg-teal-500/10 border-2 border-teal-500 text-teal-300 font-bold px-8 py-3 rounded-lg text-lg transform hover:bg-teal-500 hover:text-white hover:shadow-[0_0_20px_theme(colors.teal.500)] transition-all duration-300 self-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1, duration: 0.5 }}
-          >
-           <Link
-          to="/contact"
-           >
-           Initiate Application
-           </Link>
-          </motion.button>
-        </section>
-
-        {/* Mission Timeline */}
-        <AnimatedSection className="py-20">
-          <h2 className="text-3xl font-bold text-center text-white mb-16">
-            Mission Phases
-          </h2>
-          <div className="relative max-w-2xl mx-auto">
-            <div className="absolute left-4 md:left-1/2 w-1 h-full bg-white/10 transform md:-translate-x-1/2"></div>
-
-            {/* Phase 1 */}
-            <div className="mb-16 flex items-center w-full">
-              <div className="hidden md:block w-1/2"></div>
-              <div className="z-20 flex items-center bg-[#0D0C1D] shadow-md w-8 h-8 rounded-full border-2 border-teal-400"></div>
-              <div className="p-6 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10 w-full md:w-1/2 ml-4 md:ml-0 md:pl-10">
-                <p className="text-teal-400 font-semibold">
-                  Phase 01: Recruitment
-                </p>
-                <h3 className="text-xl font-bold text-white">
-                  Applications Open: Sep 22 - Oct 28
-                </h3>
-              </div>
+    return (
+        <div className="bg-[#0D0C1D] text-gray-200 font-sans overflow-x-hidden">
+             {/* Animated Gradient Background */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+                <div className="absolute top-[-20%] left-[10%] w-[600px] h-[600px] bg-purple-600/20 rounded-full filter blur-3xl animate-blob"></div>
+                <div className="absolute top-[10%] left-[50%] w-[500px] h-[500px] bg-teal-500/20 rounded-full filter blur-3xl animate-blob animation-delay-2000"></div>
+                 <div className="absolute bottom-[-10%] left-[25%] w-[400px] h-[400px] bg-pink-500/10 rounded-full filter blur-3xl animate-blob animation-delay-4000"></div>
             </div>
 
-            {/* Phase 2 */}
-            <div className="mb-16 flex items-center w-full">
-              <div className="hidden md:block w-1/2 md:pr-10 text-right"></div>
-              <div className="z-20 flex items-center bg-[#0D0C1D] shadow-md w-8 h-8 rounded-full border-2 border-teal-400"></div>
-              <div className="p-6 bg-black/30 backdrop-blur-sm rounded-xl border border-white/10 w-full md:w-1/2 ml-4 md:ml-0 md:pl-10">
-                <p className="text-purple-400 font-semibold">
-                  Phase 02: Incubation
-                </p>
-                <h3 className="text-xl font-bold text-white">
-                  Program Duration: Nov '25 – Jan '26
-                </h3>
-              </div>
-            </div>
-          </div>
-        </AnimatedSection>
+            <main className="container mx-auto px-6 py-12 relative z-10">
 
-        {/* Skills */}
-        <AnimatedSection className="py-16">
-          <h2 className="text-3xl font-bold text-center text-white mb-12">
-            Skill Unlocks
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {learningTopics.map((topic) => (
-              <motion.div
-                key={topic}
-                className="group p-6 text-center bg-black/30 backdrop-blur-sm rounded-2xl border border-white/10 transition-all duration-300"
-                whileHover={{
-                  y: -10,
-                  scale: 1.05,
-                  border: "1px solid #00f2ea",
-                }}
-              >
-                <h3 className="font-bold text-lg md:text-xl text-white transition-colors duration-300 group-hover:text-teal-300">
-                  {topic}
-                </h3>
-              </motion.div>
-            ))}
-          </div>
-        </AnimatedSection>
+                {/* Hero Section */}
+                <section className="text-center py-16 sm:py-24">
+                    <h1 className="text-4xl sm:text-6xl font-extrabold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
+                        Genesis Program: Cohort Alpha 🚀
+                    </h1>
+                    <p className="max-w-3xl mx-auto text-lg text-gray-300 mb-8">
+                        Your 10-week mission to forge an idea into a world-changing venture starts now.
+                    </p>
+                    <div className="mb-10">
+                        <CountdownTimer />
+                    </div>
+                    <button className="bg-teal-500 text-white font-bold px-8 py-3 rounded-lg text-lg transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/20">
+                         <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
+                        <span className="relative">Apply Now</span>
+                    </button>
+                </section>
 
-        {/* Field Commanders */}
-        <AnimatedSection className="py-16 text-center max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Field Commanders
-          </h2>
-          <p className="text-lg leading-relaxed text-gray-300 mb-8">
-            Receive direct guidance from 5 industry titans. Full profiles are
-            classified until program commencement.
-          </p>
-          <div className="flex justify-center gap-4">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-20 h-20 bg-black/30 border border-white/10 rounded-full flex items-center justify-center text-2xl font-bold text-teal-500/50"
-              >
-                ?
-              </div>
-            ))}
-          </div>
-        </AnimatedSection>
+                {/* What is Cohort Alpha? */}
+                <section className="py-16">
+                    <div className="max-w-4xl mx-auto text-center p-8 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10">
+                        <h2 className="text-3xl font-bold text-white mb-4">What is Cohort Alpha?</h2>
+                        <p className="text-lg leading-relaxed text-gray-300">
+                            This isn't school. It's a <span className="text-teal-400 font-semibold">10-week, 100% free launchpad</span>. Join a global squad of teen founders, get mentored by industry pros in live sessions, and build something real.
+                        </p>
+                    </div>
+                </section>
 
-        {/* CTA */}
-        <AnimatedSection className="text-center py-20">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Your Legacy Awaits.
-          </h2>
-          <button className="bg-teal-500 text-white font-bold px-8 py-4 rounded-lg text-xl transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/30">
-            <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-48 group-hover:h-48 opacity-10"></span>
-           <Link
-            to="/contact"
-           >
-           <span className="relative">Join Cohort Alpha</span>
-           </Link>
-          </button>
-        </AnimatedSection>
-      </main>
-    </div>
-  );
+                {/* Program Timeline */}
+                <section className="py-16">
+                    <h2 className="text-3xl font-bold text-center text-white mb-12">Your 10-Week Mission 🗓️</h2>
+                    <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-0 max-w-4xl mx-auto">
+                        {/* Step 1 */}
+                        <div className="flex items-center flex-col md:flex-row">
+                             <div className="flex items-center justify-center flex-col text-center p-4">
+                                <div className="flex items-center justify-center w-16 h-16 bg-teal-500/20 rounded-full mb-2 border-2 border-teal-400 shadow-lg shadow-teal-500/10">
+                                    <MissionIcon />
+                                </div>
+                                <h3 className="font-bold text-white">Apply</h3>
+                                <p className="text-sm text-gray-400">Sep 22 – Oct 28</p>
+                            </div>
+                            <div className="hidden md:block w-20 h-1 bg-white/20 mx-4"></div>
+                        </div>
+                         {/* Step 2 */}
+                        <div className="flex items-center flex-col md:flex-row">
+                            <div className="flex items-center justify-center flex-col text-center p-4">
+                                <div className="flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-2 border-2 border-purple-400 shadow-lg shadow-purple-500/10">
+                                    <svg className="w-6 h-6 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <h3 className="font-bold text-white">Build</h3>
+                                <p className="text-sm text-gray-400">Nov – Jan</p>
+                            </div>
+                            <div className="hidden md:block w-20 h-1 bg-white/20 mx-4"></div>
+                        </div>
+                         {/* Step 3 */}
+                        <div className="flex items-center justify-center flex-col text-center p-4">
+                            <div className="flex items-center justify-center w-16 h-16 bg-pink-500/20 rounded-full mb-2 border-2 border-pink-400 shadow-lg shadow-pink-500/10">
+                                <svg className="w-6 h-6 text-pink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-12v4m-2-2h4m5 4v4m-2-2h4M17 3l4 4M3 17l4 4m10-4l4-4M7 3l-4 4" /></svg>
+                            </div>
+                            <h3 className="font-bold text-white">Launch</h3>
+                            <p className="text-sm text-gray-400">Demo Day</p>
+                        </div>
+                    </div>
+                </section>
+                
+                {/* What You Will Learn */}
+                <section className="py-16">
+                     <h2 className="text-3xl font-bold text-center text-white mb-12">Level Up Your Founder Skills 💡</h2>
+                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
+                        {learningTopics.map((topic) => (
+                            <div key={topic} className="group aspect-square flex flex-col items-center justify-center p-4 text-center bg-white/5 rounded-2xl border border-white/10 transition-all duration-300 hover:bg-white/10 hover:border-purple-400 hover:-translate-y-2">
+                                <SkillIcon />
+                                <h3 className="font-bold text-sm md:text-base text-white transition-colors duration-300 group-hover:text-purple-300">{topic}</h3>
+                            </div>
+                        ))}
+                     </div>
+                </section>
+                
+                {/* Expert Mentorship */}
+                <section className="py-16 text-center max-w-4xl mx-auto">
+                    <h2 className="text-3xl font-bold text-white mb-4">The Guild of Mentors</h2>
+                    <p className="text-lg leading-relaxed text-gray-300">
+                        You're not alone. Get 1-on-1 guidance from 5 industry titans in SaaS, E-commerce, and VC. This is your chance to ask anything. (Full lineup coming soon!)
+                    </p>
+                </section>
+                
+                {/* Program Outcomes */}
+                <section className="py-16">
+                    <h2 className="text-3xl font-bold text-center text-white mb-12">Your Founder's Loot</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                        <div className="p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 text-center"><h3 className="text-xl font-bold text-teal-400 mb-2">Certificate of Completion</h3><p>Proof you've got the skills. Looks great on college apps.</p></div>
+                        <div className="p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 text-center"><h3 className="text-xl font-bold text-teal-400 mb-2">Project Showcase</h3><p>Pitch your venture at our exclusive Demo Day.</p></div>
+                        <div className="p-6 bg-black/20 backdrop-blur-md rounded-2xl border border-white/10 text-center"><h3 className="text-xl font-bold text-teal-400 mb-2">Global Network</h3><p>Join the OpenStart alumni, a worldwide crew of founders.</p></div>
+                    </div>
+                </section>
+
+                 {/* Final CTA */}
+                <section className="text-center py-20">
+                     <h2 className="text-3xl font-bold text-white mb-4">Your Legacy Starts Here.</h2>
+                     <p className="max-w-2xl mx-auto text-lg text-gray-300 mb-8">
+                        The clock is ticking. Don't sleep on your dreams. Applications for Cohort Alpha close October 28, 2025.
+                    </p>
+                    <button className="bg-teal-500 text-white font-bold px-8 py-3 rounded-lg text-lg transform hover:scale-105 transition-all duration-300 relative group overflow-hidden shadow-lg shadow-teal-500/20">
+                         <span className="absolute w-0 h-0 transition-all duration-300 ease-out bg-white/20 rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
+                        <span className="relative">Apply to Cohort Alpha</span>
+                    </button>
+                </section>
+            </main>
+             <style jsx global>{`
+                @keyframes blob {
+                    0% { transform: translate(0px, 0px) scale(1); }
+                    33% { transform: translate(30px, -50px) scale(1.1); }
+                    66% { transform: translate(-20px, 20px) scale(0.9); }
+                    100% { transform: translate(0px, 0px) scale(1); }
+                }
+                .animate-blob { animation: blob 10s infinite; }
+                .animation-delay-2000 { animation-delay: -2s; }
+                .animation-delay-4000 { animation-delay: -4s; }
+            `}</style>
+        </div>
+    );
 }
 
 export default CohortAlphaPage;
