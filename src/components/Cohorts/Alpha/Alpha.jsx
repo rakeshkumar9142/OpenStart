@@ -78,7 +78,8 @@ function CohortAlphaPage() {
                 {/* Hero Section */}
                 <section className="text-center py-16 sm:py-24">
                     <h1 className="text-4xl sm:text-6xl font-extrabold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-4">
-                        Genesis Program: Cohort Alpha 🚀
+                        Genesis Program: Cohort Alpha{" "}
+                        <span >🚀</span>
                     </h1>
                     <p className="max-w-3xl mx-auto text-lg text-gray-300 mb-8">
                         Your 10-week mission to forge an idea into a world-changing venture starts now.

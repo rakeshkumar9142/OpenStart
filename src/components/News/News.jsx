@@ -9,7 +9,7 @@ const News = () => {
 
   const API_KEY = import.meta.env.VITE_GUARDIAN_API_KEY;
   const BASE_URL = "https://content.guardianapis.com/search";
-
+  
   const categories = [
     { name: "Business", query: "business", icon: "📈" },
     { name: "Tech", query: "technology", icon: "💻" },

@@ -21,9 +21,9 @@ export default function CohortGammaComingSoon() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        <div className="mb-4 text-6xl">
+        <div className="mb-4 text-9xl">
             <motion.div
-              animate={{ rotate: [0, 10, -10, 0], y: [0, -10, 0] }}
+              animate={{ rotate: [0, 60, 120, 240], y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               🛰️
@@ -32,8 +32,8 @@ export default function CohortGammaComingSoon() {
 
         <h1 className="text-5xl font-extrabold tracking-tight md:text-7xl">
           <motion.h1
-          animate={{ rotate: [0, 10, -10, 0], y: [0, -10, 0] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ rotate: [0, 5, -5, 0], y: [0, -10, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
           Cohort <span className={`bg-clip-text text-transparent ${GAMMA_GRADIENT}`}>Gamma</span>
           </motion.h1>

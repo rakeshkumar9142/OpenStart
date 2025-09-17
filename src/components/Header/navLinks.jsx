@@ -1,7 +1,8 @@
 const navLinks = [
     { to: "/", text: "Home" },
     {
-        text : "Upcoming Cohorts",
+        text : "Upcoming Cohorts", 
+        className : "text-orange-500 font-bold border-b-2 border-orange-500",
         submenu : [
           { to : "/cohorts/alpha",text : "Cohort Alpha"},
           { to : "/cohorts/beta", text : "Cohort Beta"},

@@ -75,44 +75,76 @@ export default function Header() {
 
                     {/* Desktop Navigation */}
                     <div ref={desktopNavRef} className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex lg:items-center lg:gap-x-10">
-                        {navLinks.map((link, index) => (
-                            <div key={index} className="relative">
-                                {link.submenu ? (
-                                    <>
-                                        <button
-                                            onClick={() => setOpenDesktopSubmenu(openDesktopSubmenu === index ? null : index)}
-                                            className="flex items-center gap-1 font-medium text-gray-300 transition-colors duration-300 hover:text-white"
-                                            aria-haspopup="true"
-                                            aria-expanded={openDesktopSubmenu === index}
-                                        >
-                                            {link.text}
-                                            <ChevronDownIcon className={`h-4 w-4 transition-transform duration-300 ${openDesktopSubmenu === index ? 'rotate-180' : ''}`} />
-                                        </button>
-                                        <AnimatePresence>
-                                            {openDesktopSubmenu === index && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                    transition={{ duration: 0.2, ease: "easeInOut" }}
-                                                    className="absolute top-full left-1/2 mt-4 w-48 -translate-x-1/2 rounded-lg bg-gray-800/90 backdrop-blur-sm border border-white/10 shadow-xl p-2"
-                                                >
-                                                    {link.submenu.map((subItem) => (
-                                                        <NavLink key={subItem.to} to={subItem.to} onClick={() => setOpenDesktopSubmenu(null)} className={({ isActive }) => `block w-full text-left rounded-md px-4 py-2 text-sm ${isActive ? 'bg-indigo-600 text-white' : 'text-gray-200 hover:bg-indigo-600/50'}`}>
-                                                            {subItem.text}
-                                                        </NavLink>
-                                                    ))}
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </>
-                                ) : (
-                                    <NavLink to={link.to} className={navLinkClass}>
-                                        {link.text}
-                                    </NavLink>
-                                )}
-                            </div>
-                        ))}
+                    {navLinks.map((link, index) => (
+  <div key={index} className="relative">
+    {link.submenu ? (
+      <>
+        <button
+          onClick={() =>
+            setOpenDesktopSubmenu(openDesktopSubmenu === index ? null : index)
+          }
+          className="relative flex items-center gap-1 font-semibold text-gray-300 hover:text-white"
+          aria-haspopup="true"
+          aria-expanded={openDesktopSubmenu === index}
+        >
+          {link.text === "Upcoming Cohorts" ? (
+           <motion.span
+           animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+           className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 
+                      bg-[length:200%_200%] bg-clip-text text-transparent"
+         >
+           {link.text}
+         </motion.span>
+          
+          ) : (
+            link.text
+          )}
+          <ChevronDownIcon
+            className={`h-4 w-4 transition-transform duration-300 ${
+              openDesktopSubmenu === index ? "rotate-180" : ""
+            }`}
+          />
+        </button>
+
+        <AnimatePresence>
+          {openDesktopSubmenu === index && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="absolute top-full left-1/2 mt-4 w-48 -translate-x-1/2 rounded-lg 
+                         bg-gray-800/90 backdrop-blur-sm border border-white/10 shadow-xl p-2"
+            >
+              {link.submenu.map((subItem) => (
+                <NavLink
+                  key={subItem.to}
+                  to={subItem.to}
+                  onClick={() => setOpenDesktopSubmenu(null)}
+                  className={({ isActive }) =>
+                    `block w-full text-left rounded-md px-4 py-2 text-sm ${
+                      isActive
+                        ? "bg-indigo-600 text-white"
+                        : "text-gray-200 hover:bg-indigo-600/50"
+                    }`
+                  }
+                >
+                  {subItem.text}
+                </NavLink>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </>
+    ) : (
+      <NavLink to={link.to} className={navLinkClass}>
+        {link.text}
+      </NavLink>
+    )}
+  </div>
+))}
+
                     </div>
                     
                     {/* Action Buttons */}
