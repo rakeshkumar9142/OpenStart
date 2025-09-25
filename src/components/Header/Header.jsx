@@ -149,7 +149,7 @@ export default function Header() {
                     
                     {/* Action Buttons */}
                     <div className="hidden lg:flex lg:items-center lg:gap-x-4">
-                        <Link to="/login" className="rounded-md px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-white/10 hover:text-white">Log in</Link>
+                        <Link to="/Login" className="rounded-md px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-white/10 hover:text-white">Log in</Link>
                         <Link to="https://t.me/OpenStartProject_bot" target="_blank" rel="noopener noreferrer" className="inline-flex items-center rounded-md bg-gradient-to-r from-sky-500 to-blue-600 px-4 py-2 text-sm font-medium text-white shadow-lg transition-all hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30">
                             <TelegramIcon className="h-5 w-5 mr-2" /> Join Us
                         </Link>

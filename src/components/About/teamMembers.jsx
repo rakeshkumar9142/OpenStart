@@ -1,11 +1,11 @@
 
 import Rakesh_P from "../../assets/Rakesh_P.jpg";
 import Cheedhe_P from "../../assets/Cheedhe_P.jpg";
-import Vy_p from "../../assets/Vy_P.jpg"
+import Vy_p from "../../assets/Viktoriia Babchenko.jpg"
 
 const teamMembers = [
     {
-        name: "Vikusyaaa",
+        name: "Viktoriia Babchenko",
         role: "Founder & Visionary",
         country: "Ukraine",
         flag: "🇺🇦",

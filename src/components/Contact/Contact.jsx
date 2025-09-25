@@ -1,12 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-// Make sure this path points to your appwrite configuration file
-// It should export a 'databases' object and 'ID'.
+
 import { databases, ID } from "../../appwrite/appwrite.js"; 
 
 import {CheckIcon,SuccessIcon,Spinner} from './Icons.jsx'
-
-
-
 
 // --- Reusable Form Field Components with Floating Labels ---
 const FloatingLabelInput = ({ id, name, type, value, onChange, error, label }) => (
@@ -144,7 +140,7 @@ export default function ContactForm() {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email: formData.email,
-        phone: `+91${formData.phone}`,
+        phone: `${formData.phone}`,
         country: formData.country,
         graduation_year: parseInt(formData.graduationYear, 10),
       });

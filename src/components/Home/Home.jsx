@@ -1,7 +1,7 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import {  OrbitControls, Stars } from '@react-three/drei';
-import Vy_P from "../../assets/Vy_P.jpg"
+import Vy_P from "../../assets/Viktoriia Babchenko.jpg"
 import Globe from './Globe.jsx'
 import {teamMembers} from './teamMembers.jsx'
 import {GlobeIcon} from './Icon.jsx'
@@ -49,7 +49,7 @@ export default function OpenStartPage() {
                     <div className="order-2 md:order-1">
                         <h2 className="text-3xl font-bold text-indigo-400 mb-4">The Spark of a Visionary</h2>
                         <p className="text-gray-1000 text-center mb-5">
-                            OpenStart is an ambitious project founded by <strong>Vikusyaaa</strong>, 
+                            OpenStart is an ambitious project founded by <strong>Viktoriia Babchenko</strong>, 
                             a visionary young leader from Ukraine. Her entrepreneurial 
                             spark grew even stronger after her project was ranked among the top 3 out of 250 teams worldwide 
                             in the <br /> Nazarbayev University Summer Research Program 2025.
