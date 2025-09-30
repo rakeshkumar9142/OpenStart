@@ -227,11 +227,11 @@ export default function About() {
                                 <div className="flex-1 pr-8 text-right">
                                     <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700 hover:border-indigo-500/50 transition-all duration-300 transform hover:-translate-y-1">
                                         <div className="flex items-center justify-end mb-3">
-                                            <span className="text-indigo-400 text-sm font-medium">2024</span>
+                                            <span className="text-indigo-400 text-sm font-medium">2025</span>
                                         </div>
                                         <h3 className="text-2xl font-bold text-white mb-3">The Spark</h3>
                                         <p className="text-gray-300 leading-relaxed">
-                                            An idea is born from Vikusyaaa&apos;s experience at the Nazarbayev University Summer Research Program, aiming to globalize opportunities for young innovators.
+                                            An idea is born from Viktoriia Babchenko&apos;s experience at the Nazarbayev University Summer Research Program, aiming to globalize opportunities for young innovators.
                                         </p>
                                     </div>
                                 </div>
@@ -246,7 +246,7 @@ export default function About() {
                                 <div className="flex-1 pl-8">
                                     <div className="bg-gray-800 rounded-2xl p-6 border border-gray-700 hover:border-purple-500/50 transition-all duration-300 transform hover:-translate-y-1">
                                         <div className="flex items-center mb-3">
-                                            <span className="text-purple-400 text-sm font-medium">2024</span>
+                                            <span className="text-purple-400 text-sm font-medium">2025</span>
                                         </div>
                                         <h3 className="text-2xl font-bold text-white mb-3">Team Formation</h3>
                                         <p className="text-gray-300 leading-relaxed">
