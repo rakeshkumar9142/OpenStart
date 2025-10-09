@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { databases } from "../../appwrite/appwrite.js";
+import { Query } from 'appwrite';
 
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_TABLE_ID_CONTACTS;
@@ -19,7 +20,13 @@ export default function ContactTable() {
   const [editingRemark, setEditingRemark] = useState(null);
   const [noteText, setNoteText] = useState("");
   const [remarkText, setRemarkText] = useState("");
-  const [activeTab, setActiveTab] = useState("details"); // 'details', 'notes', 'remarks'
+  const [activeTab, setActiveTab] = useState("details");
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalContacts, setTotalContacts] = useState(0);
+  const itemsPerPage = 50;
 
   // Load notes and remarks from localStorage on component mount
   useEffect(() => {
@@ -34,36 +41,53 @@ export default function ContactTable() {
     }
   }, []);
 
-  // Enhanced fetch with error handling
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        setLoading(true);
-        const res = await databases.listDocuments(DATABASE_ID, COLLECTION_ID);
-        const contactsData = res.documents;
-        setContacts(contactsData);
-        setFiltered(contactsData);
-        
-        // Calculate stats
-        const uniqueCountries = new Set(contactsData.map(c => c.country)).size;
-        const recentContacts = contactsData.filter(c => {
-          const createdDate = new Date(c.$createdAt);
-          const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-          return createdDate > weekAgo;
-        }).length;
+  // Enhanced fetch with error handling and pagination
+  const fetchContacts = async (page = 1) => {
+    try {
+      setLoading(true);
+      const offset = (page - 1) * itemsPerPage;
+      
+      const res = await databases.listDocuments(
+        DATABASE_ID, 
+        COLLECTION_ID,
+        [
+          Query.limit(itemsPerPage),
+          Query.offset(offset),
+          Query.orderDesc('$createdAt')
+        ]
+      );
+      
+      const contactsData = res.documents;
+      setContacts(contactsData);
+      setFiltered(contactsData);
+      setTotalContacts(res.total);
+      
+      const calculatedTotalPages = Math.ceil(res.total / itemsPerPage);
+      setTotalPages(calculatedTotalPages);
+      setCurrentPage(page);
+      
+      // Calculate stats for current page
+      const uniqueCountries = new Set(contactsData.map(c => c.country)).size;
+      const recentContacts = contactsData.filter(c => {
+        const createdDate = new Date(c.$createdAt);
+        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        return createdDate > weekAgo;
+      }).length;
 
-        setStats({
-          total: contactsData.length,
-          countries: uniqueCountries,
-          recent: recentContacts
-        });
-      } catch (err) {
-        console.error("Error fetching contacts:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchContacts();
+      setStats({
+        total: res.total,
+        countries: uniqueCountries,
+        recent: recentContacts
+      });
+    } catch (err) {
+      console.error("Error fetching contacts:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchContacts(1);
   }, []);
 
   // Enhanced search with debouncing
@@ -328,6 +352,12 @@ export default function ContactTable() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Contact Count Info */}
+        <div className="text-sm text-gray-600 mb-4 text-center">
+          Showing {contacts.length} of {totalContacts} total contacts
+          {totalPages > 1 && ` • Page ${currentPage} of ${totalPages}`}
         </div>
       </div>
 
@@ -770,6 +800,47 @@ export default function ContactTable() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Pagination Controls - Only show if more than one page */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center space-x-4 mt-6">
+          <button
+            onClick={() => {
+              const newPage = Math.max(currentPage - 1, 1);
+              setCurrentPage(newPage);
+              fetchContacts(newPage);
+            }}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              currentPage === 1 
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                : 'bg-blue-500 text-white hover:bg-blue-600'
+            }`}
+          >
+            Previous
+          </button>
+          
+          <span className="text-gray-700">
+            Page {currentPage} of {totalPages}
+          </span>
+          
+          <button
+            onClick={() => {
+              const newPage = Math.min(currentPage + 1, totalPages);
+              setCurrentPage(newPage);
+              fetchContacts(newPage);
+            }}
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              currentPage === totalPages 
+                ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
+                : 'bg-blue-500 text-white hover:bg-blue-600'
+            }`}
+          >
+            Next
+          </button>
         </div>
       )}
     </div>
