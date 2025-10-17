@@ -57,7 +57,7 @@ const Dashboard = () => {
   };
 
   const handleProjectSpace = () => {
-    navigate("/project-space");
+    navigate("/team-dashboard");
   };
 
   // Mock data for OpenStart platform
@@ -205,7 +205,7 @@ const Dashboard = () => {
                   </span>
                 </div>
                 <div className="hidden md:block text-right">
-                  <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                  <p className="text-sm font-medium text-gray-900">{user.name}am</p>
                   <p className="text-xs text-gray-500">Young Innovator</p>
                 </div>
               </div>
@@ -225,7 +225,7 @@ const Dashboard = () => {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  Welcome back, {user.name}!
+                  Welcome back, {user.name}am!
                 </h1>
                 <p className="text-lg text-gray-600">
                   Ready to build something amazing today? 🌟

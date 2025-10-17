@@ -26,7 +26,7 @@ export default function ContactTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalContacts, setTotalContacts] = useState(0);
-  const itemsPerPage = 50;
+  const itemsPerPage = 20;
 
   // Load notes and remarks from localStorage on component mount
   useEffect(() => {
@@ -219,6 +219,9 @@ export default function ContactTable() {
       'brazil': '🇧🇷',
       'india': '🇮🇳',
       'china': '🇨🇳',
+      'tunisia': '🇹🇳',
+      'bangladesh': '🇧🇩', 
+      'ethiopia': '🇪🇹', 
     };
     return flagMap[country?.toLowerCase()] || '🌍';
   };
