@@ -29,10 +29,26 @@ const Auth = () => {
     }
   };
 
+  const loginReminderStyle = {
+    backgroundColor: '#d1fae5', /* Subtle professional green */
+    padding: '2px 4px',
+    borderRadius: '4px',
+    fontWeight: '600', /* Using Tailwind's equivalent `font-semibold` */
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow">
-        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
+      <h2 className="text-2xl font-bold text-center mb-4">
+      Login
+      <p className="text-sm text-gray-500 text-center mt-2">
+        If you are already logged in, please proceed to the{' '}
+        <a href="/Dashboard" style={loginReminderStyle}>
+          Dashboard
+        </a>
+        .
+      </p>
+    </h2>
 
         {error && <div className="text-red-600 mb-3">{error}</div>}
 
