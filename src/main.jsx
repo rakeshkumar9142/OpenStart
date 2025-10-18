@@ -28,6 +28,7 @@ import Gama from "./components/Cohorts/Gama/Gama.jsx";
 import Login from "./components/Auth/Auth.jsx";
 import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import Profile from "./components/Profile/Profile.jsx"
+import OpenStartPopup from "./components/OpenStartPopup/OpenStartPopup.jsx";
 
 import ProtectedRoute from "./components/Protected/Protected.jsx";
 
