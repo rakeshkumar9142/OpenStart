@@ -181,7 +181,7 @@ export default function OpenStartPopup({
               {/* Contact Info */}
               <div className="text-center mb-4">
                 <p className="text-gray-600 text-xs">
-                  Questions? <span className="font-semibold text-blue-600">+91 9905307658</span>
+                  Questions? <span className="font-semibold text-blue-600">openstaart@gmail.com</span>
                 </p>
               </div>
 
