@@ -11,6 +11,9 @@ module.exports = async function (context) {
     if (context.req.variables && context.req.variables.APPWRITE_FUNCTION_EVENT_DATA) {
       // Database trigger - parse the event data
       console.log('📋 Database trigger detected');
+      if (context.req.variables.APPWRITE_FUNCTION_EVENT) {
+        console.log('🔔 Event:', context.req.variables.APPWRITE_FUNCTION_EVENT);
+      }
       payload = JSON.parse(context.req.variables.APPWRITE_FUNCTION_EVENT_DATA);
     } else if (context.req.body) {
       // HTTP execution - parse the body
@@ -49,11 +52,30 @@ module.exports = async function (context) {
     }
     
     console.log('📝 Processing payload:', JSON.stringify(payload, null, 2));
+
+    // Optional: filter events by database and collection to avoid accidental triggers
+    const expectedDatabaseId = process.env.DATABASE_ID || (context.req.variables ? context.req.variables.DATABASE_ID : null);
+    const expectedCollectionId = process.env.COLLECTION_ID || (context.req.variables ? context.req.variables.COLLECTION_ID : null);
+    if (payload && payload.$databaseId && payload.$collectionId && expectedDatabaseId && expectedCollectionId) {
+      if (payload.$databaseId !== expectedDatabaseId || payload.$collectionId !== expectedCollectionId) {
+        console.log('⏭️ Skipping event for different collection/database', {
+          gotDb: payload.$databaseId,
+          gotCol: payload.$collectionId,
+          expectDb: expectedDatabaseId,
+          expectCol: expectedCollectionId,
+        });
+        return context.res.json({ success: true, skipped: true });
+      }
+    }
     
-    // Extract user data with multiple possible field names
+    // Extract user data with multiple possible field names / shapes
+    // Supports: database document payloads, users.*.create payloads, or HTTP body
+    const possibleUser = payload.user || payload.account || null;
+    const rawName = (payload.first_name || payload.firstName || payload.name || (possibleUser && (possibleUser.name || possibleUser.firstName)) || '').toString().trim();
+    const firstNameFromName = rawName ? rawName.split(' ')[0] : '';
     const userData = {
-      firstName: payload.first_name || payload.firstName || payload.name || 'there',
-      email: payload.email,
+      firstName: (payload.first_name || payload.firstName || firstNameFromName || 'there'),
+      email: (payload.email || (possibleUser && possibleUser.email) || null),
       graduationYear: payload.graduation_year || payload.graduationYear,
       country: payload.country
     };
@@ -84,7 +106,7 @@ module.exports = async function (context) {
     }
 
     // Configure email transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: smtpHost,
       port: parseInt(smtpPort),
       secure: smtpPort === '465' || smtpPort === 465,
