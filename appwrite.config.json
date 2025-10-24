@@ -1,0 +1,169 @@
+{
+    "projectId": "68abdd82000cdf3e3fc8",
+    "endpoint": "https://fra.cloud.appwrite.io/v1",
+    "projectName": "ContactForm",
+    "settings": {
+        "services": {
+            "account": true,
+            "avatars": true,
+            "databases": true,
+            "locale": true,
+            "health": true,
+            "storage": true,
+            "teams": true,
+            "users": true,
+            "sites": true,
+            "functions": true,
+            "graphql": true,
+            "messaging": true
+        },
+        "auth": {
+            "methods": {
+                "jwt": true,
+                "phone": true,
+                "invites": true,
+                "anonymous": true,
+                "email-otp": true,
+                "magic-url": true,
+                "email-password": true
+            },
+            "security": {
+                "duration": 31536000,
+                "limit": 0,
+                "sessionsLimit": 10,
+                "passwordHistory": 0,
+                "passwordDictionary": false,
+                "personalDataCheck": false,
+                "sessionAlerts": false,
+                "mockNumbers": []
+            }
+        }
+    },
+    "functions": [
+        {
+            
+                "$id": "welcome-email",
+                "execute": [
+                  "users"
+                ],
+                "name": "OpenStart Welcome Email",
+                "enabled": true,
+                "logging": true,
+                "runtime": "node-18.0",
+                "scopes": [],
+                "events": [
+                  "databases.68c05c900023ab00a1f0.collections.openstart.documents.create"
+                ],
+                "schedule": "",
+                "timeout": 15,
+                "entrypoint": "src/index.js",
+                "commands": "npm install",
+                "specification": "s-0.5vcpu-512mb",
+                "path": "functions/sendWelcomeEmail"
+              
+        }
+    ],
+    "tablesDB": [
+        {
+            "$id": "68c05c900023ab00a1f0",
+            "name": "OpenStart",
+            "enabled": true
+        }
+    ],
+    "tables": [
+        {
+            "$id": "openstart",
+            "$permissions": [
+                "create(\"any\")",
+                "read(\"any\")",
+                "update(\"any\")",
+                "delete(\"any\")"
+            ],
+            "databaseId": "68c05c900023ab00a1f0",
+            "name": "OpenStart",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                {
+                    "key": "first_name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 30,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "last_name",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 50,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "email",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 60,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "graduation_year",
+                    "type": "integer",
+                    "required": true,
+                    "array": false,
+                    "min": -9223372036854775808,
+                    "max": 9223372036854775807,
+                    "default": null
+                },
+                {
+                    "key": "country",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 50,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "phone",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 15,
+                    "default": null,
+                    "encrypt": false
+                }
+            ],
+            "indexes": []
+        }
+    ],
+    "buckets": [
+        {
+            "$id": "68b03a8500366b5b378e",
+            "$permissions": [],
+            "fileSecurity": false,
+            "name": "Customer",
+            "enabled": true,
+            "maximumFileSize": 50000000,
+            "allowedFileExtensions": [],
+            "compression": "none",
+            "encryption": true,
+            "antivirus": true
+        }
+    ],
+    "teams": [
+        {
+            "$id": "68d26c5e00280a4f4345",
+            "name": "admin"
+        },
+        {
+            "$id": "68d26c7b00270941171d",
+            "name": "team"
+        }
+    ]
+}

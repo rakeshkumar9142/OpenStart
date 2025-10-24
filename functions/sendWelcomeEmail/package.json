@@ -1,0 +1,13 @@
+{
+    "name": "send-welcome-email",
+    "version": "1.0.0",
+    "description": "Appwrite function to send a welcome email to new users.",
+    "main": "src/index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+      "nodemailer": "^6.9.7"
+    }
+  }
+  
