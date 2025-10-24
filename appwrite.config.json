@@ -41,27 +41,26 @@
     },
     "functions": [
         {
-            
-                "$id": "welcome-email",
-                "execute": [
-                  "users"
-                ],
-                "name": "OpenStart Welcome Email",
-                "enabled": true,
-                "logging": true,
-                "runtime": "node-18.0",
-                "scopes": [],
-                "events": [
-                  "databases.68c05c900023ab00a1f0.collections.openstart.documents.create"
-                ],
-                "schedule": "",
-                "timeout": 15,
-                "entrypoint": "src/index.js",
-                "commands": "npm install",
-                "specification": "s-0.5vcpu-512mb",
-                "path": "functions/sendWelcomeEmail"
-              
-        }
+            "$id": "welcome-email",
+            "execute": [
+              "any"
+            ],
+            "name": "OpenStart Welcome Email",
+            "enabled": true,
+            "logging": true,
+            "runtime": "node-18.0",
+            "scopes": [],
+            "events": [
+              "databases.68c05c900023ab00a1f0.collections.openstart.documents.*.create"
+            ],
+            "schedule": "",
+            "timeout": 15,
+            "entrypoint": "src/index.js",
+            "commands": "npm install",
+            "specification": "s-0.5vcpu-512mb",
+            "path": "functions/sendWelcomeEmail"
+          }
+    
     ],
     "tablesDB": [
         {
