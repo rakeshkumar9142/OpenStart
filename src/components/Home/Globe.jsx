@@ -51,11 +51,8 @@ export default function Globe() {
           <meshStandardMaterial
 
             map={texture}
-
             metalness={0.5}
-
             roughness={0.7}
-
           />
 
         </Sphere>
