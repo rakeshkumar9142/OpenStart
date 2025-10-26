@@ -1,39 +1,20 @@
 import React, { useRef } from 'react';
-
 import { useFrame } from '@react-three/fiber';
-
 import { Sphere } from '@react-three/drei';
-
 import * as THREE from 'three';
-
-
 
 export default function Globe() {
 
     const globeRef = useRef();
-
- 
-
     useFrame(() => {
 
       if (globeRef.current) {
-
         globeRef.current.rotation.y += 0.01;
-
       }
-
     });
-
- 
-
     // Create a texture loader
 
     const textureLoader = new THREE.TextureLoader();
-
-   
-
-   
-
     const canvas = document.createElement('canvas');
 
     canvas.width = 2048;
@@ -41,9 +22,6 @@ export default function Globe() {
     canvas.height = 1024;
 
     const context = canvas.getContext('2d');
-
-   
-
     // Draw continents (simplified)
 
     context.fillStyle = '#4F4F4F'; // Land color
@@ -62,13 +40,7 @@ export default function Globe() {
 
     context.fillRect(1000, 100, 200, 150);
 
-   
-
     const texture = new THREE.CanvasTexture(canvas);
-
- 
-
- 
 
     return (
 
