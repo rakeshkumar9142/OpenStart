@@ -8,6 +8,7 @@ export default async ({ req, res, log, error }) => {
     log('Function triggered by event: ' + event);
 
     // --- SAFETY CHECK (from our debugging) ---
+    
     const EXPECTED_EVENT_PREFIX = 'databases.68c05c900023ab00a1f0.collections.openstart.documents.';
     if (!event || !event.startsWith(EXPECTED_EVENT_PREFIX) || !event.endsWith('.create')) {
       throw new Error(`Function was not triggered by a document.create event for the correct collection. Got: ${event}`);
