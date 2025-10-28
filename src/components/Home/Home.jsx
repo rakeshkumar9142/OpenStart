@@ -15,7 +15,7 @@ export default function Home() {
                 <FounderStorySection />
                 <TeamSection />
                 <DifferentiatorsSection />
-                <VisionSection />
+              
             </main>
         </div>
     );
