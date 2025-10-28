@@ -91,7 +91,7 @@ export default function OpenStartPopup({
                   <div className="text-blue-800 text-xs">Seats Only</div>
                 </div>
                 <div className="bg-red-50 rounded-lg p-3 text-center border border-red-100">
-                  <div className="text-red-600 font-bold text-lg">Oct 28</div>
+                  <div className="text-red-600 font-bold text-lg">Nov 20</div>
                   <div className="text-red-800 text-xs">Deadline</div>
                 </div>
               </div>
